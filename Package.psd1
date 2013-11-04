@@ -7,6 +7,6 @@
 
    ModuleInfoUri="https://github.com/proxb/poshwsus"
    LicenseUri="http://opensource.org/licenses/ms-pl"
-   PackageManifestUri="https://github.com/proxb/poshwsus/Poshwsus.psd1"
+   PackageManifestUri="https://raw.github.com/proxb/poshwsus/Poshwsus.psd1"
    DownloadUri="https://github.com/proxb/poshwsus/PoshWSUS.psmx"
 }
