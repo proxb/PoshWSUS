@@ -914,11 +914,6 @@
 		  <TableControl>
 			  <TableHeaders>
 				  <TableColumnHeader>
-					  <Label>FullDomainName</Label>
-					  <Width>20</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
 					  <Label>ID</Label>
 					  <Width>40</Width>
 					  <Alignment>Left</Alignment>
@@ -937,9 +932,6 @@
 			  <TableRowEntries>
 				  <TableRowEntry>
 					  <TableColumnItems>
-						  <TableColumnItem>
-							  <PropertyName>FullDomainName</PropertyName>
-						  </TableColumnItem>
 						  <TableColumnItem>
 							  <PropertyName>ID</PropertyName>
 						  </TableColumnItem>
