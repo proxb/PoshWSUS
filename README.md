@@ -13,35 +13,35 @@ Functions have been renamed from *-PoshWSUS* to *-PSWSUS* based on user feedback
 -------------------
 |Updated Functions|
 -------------------
-Connect-PSWSUSServer
-Get-PSWSUSClassification
-Get-PSWSUSCategory
-Get-PSWSUSClient
-Get-PSWSUSGroup
-Get-PSWSUSUpdate
-Approve-PSWSUSUpdate
-Deny-PSWSUSUpdate
+- Connect-PSWSUSServer
+- Get-PSWSUSClassification
+- Get-PSWSUSCategory
+- Get-PSWSUSClient
+- Get-PSWSUSGroup
+- Get-PSWSUSUpdate
+- Approve-PSWSUSUpdate
+- Deny-PSWSUSUpdate
 
 ---------------
 |New Functions|
 ---------------
-Get-PSWSUSConfiguration
-Get-PSWSUSEnabledUpdateLanguages
-Get-PSWSUSProxyServer
-Get-PSWSUSSupportedUpdateLanguages
-Get-PSWSUSSyncSchedule
-Get-PSWSUSSyncUpdateCategories
-Get-PSWSUSSyncUpdateClassifications
-Get-PSWSUSUpdateFiles
-Get-PSWSUSUpdateSource
-Set-PSWSUSClassification
-Set-PSWSUSEnabledUpdateLanguages
-Set-PSWSUSProduct
-Set-PSWSUSProxyServer
-Set-PSWSUSSyncSchedule
-Set-PSWSUSTargetingMode
-Set-PSWSUSUpdateFiles
-Set-PSWSUSUpdateSource
+- Get-PSWSUSConfiguration
+- Get-PSWSUSEnabledUpdateLanguages
+- Get-PSWSUSProxyServer
+- Get-PSWSUSSupportedUpdateLanguages
+- Get-PSWSUSSyncSchedule
+- Get-PSWSUSSyncUpdateCategories
+- Get-PSWSUSSyncUpdateClassifications
+- Get-PSWSUSUpdateFiles
+- Get-PSWSUSUpdateSource
+- Set-PSWSUSClassification
+- Set-PSWSUSEnabledUpdateLanguages
+- Set-PSWSUSProduct
+- Set-PSWSUSProxyServer
+- Set-PSWSUSSyncSchedule
+- Set-PSWSUSTargetingMode
+- Set-PSWSUSUpdateFiles
+- Set-PSWSUSUpdateSource
 
 -------------------
 |Removed Functions|
