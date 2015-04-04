@@ -59,7 +59,6 @@ Function Connect-PSWSUSServer {
             [switch]$SecureConnection, 
               
             [Parameter()]
-            [ValidateSet("80","443","8530","8531" )] 
             [int]$Port = 80                                
         )   
     Begin {                         
