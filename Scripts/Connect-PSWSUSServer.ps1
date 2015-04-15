@@ -62,7 +62,7 @@ Function Connect-PSWSUSServer
 	
 		[Parameter(Position = 2)]
 		[int]
-		$Port = 8530
+		$Port = $DefaultWsusPort
 	)
 	Begin
 	{

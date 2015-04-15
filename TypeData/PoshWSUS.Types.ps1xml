@@ -22,7 +22,7 @@
 	  <ScriptProperty>
 		<Name>ParentGroup</Name>
 			<GetScriptBlock>
-				$this.GetParentTargetGroup() | Select -Expand Name
+				$this.GetParentTargetGroup().Name
 			</GetScriptBlock>
 	  </ScriptProperty>		 
     </Members>
