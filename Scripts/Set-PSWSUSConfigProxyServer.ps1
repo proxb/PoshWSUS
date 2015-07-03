@@ -1,4 +1,4 @@
-function Set-PSWSUSConfigProxyServer {
+function Set-PSWsusConfigProxyServer {
 <#
 .SYNOPSIS
 	This cmdlet sets whether to use a proxy to download updates.
@@ -16,11 +16,8 @@ function Set-PSWSUSConfigProxyServer {
     The port number that is used to connect to the proxy server. The default is port 80. 
     The port number must be greater than zero and less than 65536. 
 
-.PARAMETER ProxyUserName
-    The user name to use when accessing the proxy server. The name must be less than 256 characters. 
-
-.PARAMETER ProxyUserDomain
-    The name of the domain that contains the user's logon account. The name must be less than 256 characters.
+.PARAMETER ProxyCredential
+    The user name and password to use when accessing the proxy server. The name must be less than 256 characters. 
 	
 .PARAMETER ProxyPassword
     Password to use when accessing the proxy.
@@ -50,146 +47,127 @@ function Set-PSWSUSConfigProxyServer {
     credentials are sent in plaintext.
 
 .EXAMPLE
-    Set-PSWSUSConfigProxyServer -UseProxy $false
+    Set-PSWsusConfigProxyServer -UseProxy $false
 
 .EXAMPLE
-    Set-PSWSUSConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128"
+    Set-PSWsusConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128"
 
 .EXAMPLE
-    Set-PSWSUSConfigProxyServer -UseProxy $true -SslProxyName "SslProxy.domain.local" -SslProxyServerPort 443
+    Set-PSWsusConfigProxyServer -UseProxy $true -SslProxyName "SslProxy.domain.local" -SslProxyServerPort 443
 
 .EXAMPLE
-    Set-PSWSUSConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128" `
+    Set-PSWsusConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128" `
     -AnonymousProxyAccess $true -AllowProxyCredentialsOverNonSsl $false
 
 .EXAMPLE
-    Set-PSWSUSConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128" `
-    -AnonymousProxyAccess $false -ProxyUserName "YourUserName" -ProxyUserDomain "domain" `
-    -ProxyPassword 'Password' -AllowProxyCredentialsOverNonSsl $true
+    Set-PSWsusConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128" `
+    -AnonymousProxyAccess $false -ProxyCredential (Get-Credential) -ProxyUserDomain "domain" `
+    -AllowProxyCredentialsOverNonSsl $true
 
 .NOTES
-	Name: Set-PSWSUSConfigProxyServer
+	Name: Set-PSWsusConfigProxyServer
     Author: Dubinsky Evgeny
     DateCreated: 1DEC2013
+    Modified 05 Feb 2014 - Boe Prox
+        -Remove Begin, Process, End as function does not support pipeline input
+        -Added -WhatIf support
+        -Changed [boolean] param types to [switch] to align with best practices
 
 .LINK
 	http://blog.itstuff.in.ua/?p=62#Set-PSWSUSConfigProxyServer
 
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$True)]
     Param
     (
-        [Boolean]$UseProxy,
-        [ValidateLength(1, 255)][alias("SslProxyName")][string]$ProxyName,
-        [ValidateRange(0,65536)][alias("SslProxyServerPort")][int]$ProxyServerPort,
-        [ValidateLength(1, 255)][string]$ProxyUserName,
-        [ValidateLength(1, 255)][string]$ProxyUserDomain,
-        $ProxyPassword,
+        [switch]$UseProxy,
+        [ValidateLength(1, 255)]
+        [alias("SslProxyName")]
+        [string]$ProxyName,
+        [ValidateRange(0,65536)]
+        [alias("SslProxyServerPort")]
+        [int]$ProxyServerPort,
+        [ValidateLength(1, 255)]
+        [PSCredential]$ProxyCredential,
+        [ValidateLength(1, 255)]
+        [string]$ProxyUserDomain,
         # Gets or sets whether a separate proxy should be used for SSL communications with the upstream server. 
-        [Boolean]$UseSeparateProxyForSsl,
-        [Boolean]$AnonymousProxyAccess,
-        [Boolean]$AllowProxyCredentialsOverNonSsl
+        [switch]$UseSeparateProxyForSsl,
+        [switch]$AnonymousProxyAccess,
+        [switch]$AllowProxyCredentialsOverNonSsl
     )
 
-    Begin
-    {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-        }#endif
-        else
+        if(-NOT $wsus)
         {
             Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
             Break
         }
-    }
-    Process
-    {
-        if ($PSBoundParameters['UseProxy'] -ne $null)
-        {
-            $config.UseProxy = $UseProxy
-        }
-        else
-        {
-            $config.UseProxy = $false
-        }
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Proxy Server')) {
+            if ($PSBoundParameters['UseProxy'])
+            {
+                $config.UseProxy = $True
+            }
+            else
+            {
+                $config.UseProxy = $false
+            }
 
-        if ($PSBoundParameters['ProxyName'])
-        {
-            $config.ProxyName = $ProxyName
-        }#endif
+            if ($PSBoundParameters['ProxyName'])
+            {
+                $config.ProxyName = $ProxyName
+            }#endif
         
-        if ($PSBoundParameters['ProxyServerPort'])
-        {
-            $config.ProxyServerPort = $ProxyServerPort
-        }#endif
+            if ($PSBoundParameters['ProxyServerPort'])
+            {
+                $config.ProxyServerPort = $ProxyServerPort
+            }#endif
                 
-        if ($PSBoundParameters['ProxyUserName'] -ne $null)
-        {
-            $config.ProxyUserName = $ProxyUserName
-        }#endif
-        else
-        {
-            $config.ProxyUserName = $null
-        }
+            if ($PSBoundParameters['ProxyCredential'] -ne $null)
+            {
+                $config.ProxyUserName = $ProxyCredential.GetNetworkCredential().UserName
+            }#endif
+            else
+            {
+                $config.ProxyUserName = $null
+            }
 
-        if ($PSBoundParameters['ProxyUserDomain'] -ne $null)
-        {
-            $config.ProxyUserDomain = $ProxyUserDomain
-        }#endif
-        else
-        {
-            $config.ProxyUserDomain = $null
-        }
+            if ($PSBoundParameters['ProxyUserDomain'] -ne $null)
+            {
+                $config.ProxyUserDomain = $ProxyUserDomain
+            }#endif
+            else
+            {
+                $config.ProxyUserDomain = $null
+            }         
 
-        if ($PSBoundParameters['ProxyPassword'])
-        {
-            # TO DO. Why Password dosen't set?
-            # Need secure connection with wsus
-            #$ProxyPassword = Read-Host -Prompt 'Enter Password' -AsSecureString
-            #$wsus.GetConfiguration().SetProxyPassword($ProxyPassword)
-            
-            Write-Warning "SORRY! You need to specify password manually in console `n This issue we will fix in next release"
-        }#endif
-        elseif($PSBoundParameters['ProxyPassword'] -eq $null)
-        {
-            # if not SSL connection, ProxyPassword is read only
-            #$config.ProxyPassword  = $null
-        }
+            if ($PSBoundParameters['AnonymousProxyAccess'])
+            {
+                $config.AnonymousProxyAccess = $True
+            }#endif
+            else
+            {
+                $config.AnonymousProxyAccess  = $true
+            }
 
-        if ($PSBoundParameters['AnonymousProxyAccess'] -ne $null)
-        {
-            $config.AnonymousProxyAccess = $AnonymousProxyAccess
-        }#endif
-        else
-        {
-            $config.AnonymousProxyAccess  = $true
-        }
-
-        if ($PSBoundParameters['AllowProxyCredentialsOverNonSsl'] -ne $null)
-        {
-            $config.AllowProxyCredentialsOverNonSsl = $AllowProxyCredentialsOverNonSsl
-        }#endif
-        else
-        {
-            $config.AllowProxyCredentialsOverNonSsl  = $false
-        }
+            if ($PSBoundParameters['AllowProxyCredentialsOverNonSsl'])
+            {
+                $config.AllowProxyCredentialsOverNonSsl = $True
+            }#endif
+            else
+            {
+                $config.AllowProxyCredentialsOverNonSsl  = $false
+            }
                 
-        if ($PSBoundParameters['UseSeparateProxyForSsl'] -ne $null)
-        {
-            $config.UseSeparateProxyForSsl = $UseSeparateProxyForSsl
-        }#endif
-        else
-        {
-            $config.UseSeparateProxyForSsl  = $false
-        }
-    }
+            if ($PSBoundParameters['UseSeparateProxyForSsl'])
+            {
+                $config.UseSeparateProxyForSsl = $True
+            }#endif
+            else
+            {
+                $config.UseSeparateProxyForSsl  = $false
+            }
 
-    End
-    {
-        $config.Save()
-    }
+            $config.Save()
+        }
 }
