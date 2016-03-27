@@ -29,46 +29,40 @@ function Set-PSWSUSConfigTargetingMode {
 		Name: Set-PSWSUSConfigTargetingMode
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified 05 Feb 2014 -- Boe Prox
+            -Changed to use ParameterSetName to avoid possibility of using both switches
+            -Add -WhatIf support
 
 	.LINK
 		http://blog.itstuff.in.ua/?p=62#Set-PSWSUSConfigTargetingMode
 
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess=$True,
+        DefaultParameterSetName='UpdateServiceConsole'
+    )]
     Param
     (
+        [parameter(ParameterSetName='UpdateServiceConsole')]
         [switch]$UpdateServiceConsole,
+        [parameter(ParameterSetName='GroupPolicyOrRegistry')]
         [switch]$GroupPolicyOrRegistry
     )
 
-    Begin
+    if(-NOT $wsus)
     {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-        }#endif
-        else
-        {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
-            Break
-        }
+
+        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Break
     }
-    Process
-    {        
-        if($PSBoundParameters['UpdateServiceConsole'])
-        {
-            $config.TargetingMode = 1
-        }#endif
-        if($PSBoundParameters['GroupPolicyOrRegistry'])
-        {
-            $config.TargetingMode = 0
-        }#endif
-    }#endProcess
-    End
-    {
-        $config.Save()
+    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Targeting Mode')) {
+        Switch ($PSCmdlet.ParameterSetName) {
+            'UpdateServiceConsole' {$_wsusconfig.TargetingMode = 1}
+            'GroupPolicyOrRegistry' {$_wsusconfig.TargetingMode = 0}
+        }   
+        If ($PSBoundParameters['UpdateServiceConsole'] -OR $PSBoundParameters['GroupPolicyOrRegistry']) {
+            $_wsusconfig.Save()
+        }
     }
 }

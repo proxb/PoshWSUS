@@ -43,21 +43,21 @@ function Set-PSWSUSConfigUpdateFiles {
         This option applies only if the server is a downstream server and content is downloaded locally.
 
 	.EXAMPLE
-		Set-PSWSUSConfigUpdateFiles -HostBinariesOnMicrosoftUpdate $false -DownloadExpressPackages $true -DownloadUpdateBinariesAsNeeded $true -GetContentFromMU $true
+		Set-PSWSUSConfigUpdateFiles -HostBinariesOnMicrosoftUpdate:$false -DownloadExpressPackages -DownloadUpdateBinariesAsNeeded  -GetContentFromMU 
 
         Description
         -----------
         Updates are downloaded and stored on the local server. Download express installation packages. Update binaries are downloaded from Microsoft Update.
 
 	.EXAMPLE
-		Set-PSWSUSConfigUpdateFiles -HostBinariesOnMicrosoftUpdate $false -DownloadUpdateBinariesAsNeeded $true -DownloadExpressPackages $false
+		Set-PSWSUSConfigUpdateFiles -HostBinariesOnMicrosoftUpdate:$false -DownloadUpdateBinariesAsNeeded
 
         Description
         -----------
         Updates are downloaded and stored on the local server. Don't download express packages. Only approved updates are downloaded.
         
     .EXAMPLE
-        Set-PSWSUSConfigUpdateFiles -HostBinariesOnMicrosoftUpdate $true
+        Set-PSWSUSConfigUpdateFiles -HostBinariesOnMicrosoftUpdate
 
         Description
         -----------
@@ -67,77 +67,65 @@ function Set-PSWSUSConfigUpdateFiles {
         Name: Set-PSWSUSConfigUpdateFiles
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified 05 Feb 2014 -- Boe Prox
+            -Removed Begin, Process, End
+            -Updated [bool] param types to [switch] to align with best practice
+            -Added -WhatIf support
 
 	.LINK
 		http://blog.itstuff.in.ua/?p=62#Set-PSWSUSConfigUpdateFiles
 
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$True)]
     Param
     (
-        [Parameter(Position = 0,Mandatory=$true)]
-        [Boolean]$HostBinariesOnMicrosoftUpdate,
-        [Boolean]$DownloadExpressPackages,
-        [Boolean]$DownloadUpdateBinariesAsNeeded,
-        [Boolean]$GetContentFromMU
+        [Parameter(Mandatory=$True)]
+        [switch]$HostBinariesOnMicrosoftUpdate,
+        [switch]$DownloadExpressPackages,
+        [switch]$DownloadUpdateBinariesAsNeeded,
+        [switch]$GetContentFromMU
     )
 
-    Begin
+    if(-NOT $wsus)
     {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-        }#endif
-        else
-        {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
-            Break
-        }
+        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Break
     }
-    Process
-    {        
-        
-        if(($PSBoundParameters['HostBinariesOnMicrosoftUpdate'] -eq $true) -or `
-           ($PSBoundParameters['HostBinariesOnMicrosoftUpdate'] -eq $false))
+       
+    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Update Config Update Files')) {        
+        if(($PSBoundParameters['HostBinariesOnMicrosoftUpdate']) -or (-NOT $PSBoundParameters['HostBinariesOnMicrosoftUpdate']))
         {
-            $config.HostBinariesOnMicrosoftUpdate = $HostBinariesOnMicrosoftUpdate
+            $_wsusconfig.HostBinariesOnMicrosoftUpdate = $True
         }#endif
 
-        if(($PSBoundParameters['DownloadExpressPackages'] -eq $true) -or `
-           ($PSBoundParameters['DownloadExpressPackages'] -eq $false))
+        if(($PSBoundParameters['DownloadExpressPackages']) -or (-NOT $PSBoundParameters['DownloadExpressPackages']))
         {
-            $config.DownloadExpressPackages = $DownloadExpressPackages
+            $_wsusconfig.DownloadExpressPackages = $True
         }#endif
         else
         {
-            $config.DownloadExpressPackages = $false
+            $_wsusconfig.DownloadExpressPackages = $false
         }
         
-        if(($PSBoundParameters['DownloadUpdateBinariesAsNeeded'] -eq $true) -or `
-           ($PSBoundParameters['DownloadUpdateBinariesAsNeeded'] -eq $false))
+        if(($PSBoundParameters['DownloadUpdateBinariesAsNeeded']) -or (-NOT $PSBoundParameters['DownloadUpdateBinariesAsNeeded']))
         {
-            $config.DownloadUpdateBinariesAsNeeded =$DownloadUpdateBinariesAsNeeded
+            $_wsusconfig.DownloadUpdateBinariesAsNeeded =$True
         }#endif
         else
         {
-            $config.DownloadUpdateBinariesAsNeeded =$false
+            $_wsusconfig.DownloadUpdateBinariesAsNeeded =$false
         }
 
-        if(($PSBoundParameters['GetContentFromMU'] -eq $true) -or `
-           ($PSBoundParameters['GetContentFromMU'] -eq $false))
+        if(($PSBoundParameters['GetContentFromMU']) -or (-NOT $PSBoundParameters['GetContentFromMU']))
         {
-            $config.GetContentFromMU = $GetContentFromMU
+            $_wsusconfig.GetContentFromMU = $True
         }#endif
         else
         {         
-            $config.GetContentFromMU = $false
+            $_wsusconfig.GetContentFromMU = $false
         }
-    }
-    End
-    {
-        $config.Save()
+
+        $_wsusconfig.Save()
     }
 }

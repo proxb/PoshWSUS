@@ -44,7 +44,7 @@ function Add-PSWSUSClientToGroup {
         #Verify Computer is in WSUS
         If ($Computername -is [string]) {
             Write-Verbose "Validating client in WSUS"
-            $client = Get-PSWSUSClient -computer $Computername
+            $client = Get-PSWSUSClient -computername $Computername
         } ElseIf ($Computername -is [Microsoft.UpdateServices.Internal.BaseApi.ComputerTarget]) {
             Write-Verbose "Collection of clients"
             $Client = $Computername

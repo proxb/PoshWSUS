@@ -47,7 +47,7 @@ function Remove-PSWSUSClientFromGroup {
                 [string]$Computer                                             
                 )
     #Verify Computer is in WSUS
-    $client = Get-PSWSUSClient -computer $computer
+    $client = Get-PSWSUSClient -computername $computer
     If ($client) {
         #Get group object
         Write-Verbose "Retrieving group"

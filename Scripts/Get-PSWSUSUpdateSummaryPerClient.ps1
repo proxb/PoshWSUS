@@ -16,6 +16,7 @@ function Get-PSWSUSUpdateSummaryPerClient {
         Name: Get-PSWSUSUpdateSummaryForClient
         Author: Boe Prox
         DateCreated: 23NOV2011 
+        DateModified: 21 July 2015
                
     .LINK  
         https://learn-powershell.net
@@ -23,18 +24,18 @@ function Get-PSWSUSUpdateSummaryPerClient {
     .EXAMPLE    
     Get-PSWSUSUpdateSummaryPerClient -ComputerScope (New-PSWSUSComputerScope) -UpdateScope (New-PSWSUSUpdateScope)
 
-    UpdateTitle                    ComputerGroup        Computer                  InstalledCount  NeededCount       FailedCount
-    -----------                    -------------        --------                  --------------  -----------       -----------
-                                                        Server1                   108             8                 0
-                                                        Server2                   99              9                 0
-                                                        Server3                   184             13                0
-                                                        Server4                   98              5                 14
-                                                        Server5                   151             8                 0
-                                                        Server6                   128             7                 0
-                                                        Server7                   154             9                 0
-                                                        Server8                   151             8                 0
-                                                        Server9                   155             8                 0
-                                                        Server10                  149             12                0
+    Computer                  InstalledCount  NeededCount       FailedCount
+    --------                  --------------  -----------       -----------
+    Server1                   108             8                 0
+    Server2                   99              9                 0
+    Server3                   184             13                0
+    Server4                   98              5                 14
+    Server5                   151             8                 0
+    Server6                   128             7                 0
+    Server7                   154             9                 0
+    Server8                   151             8                 0
+    Server9                   155             8                 0
+    Server10                  149             12                0
 
     Description
     -----------    
@@ -70,7 +71,10 @@ function Get-PSWSUSUpdateSummaryPerClient {
             $hash['ComputerScope'] = New-PSWSUSComputerScope
         }
         Write-Verbose ('Performing query based on scopes')
-        $wsus.GetSummariesPerComputerTarget($hash['UpdateScope'],$hash['ComputerScope'])
+        $wsus.GetSummariesPerComputerTarget($hash['UpdateScope'],$hash['ComputerScope']) | ForEach {
+            $_.pstypenames.insert(0,'Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Client')
+            $_
+        }
     }  
     End {
         $ErrorActionPreference = 'continue'    

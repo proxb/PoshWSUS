@@ -18,7 +18,9 @@ function Set-PSWSUSConfigProduct {
 .NOTES  
     Name: Set-PSWSUSConfigProduct
     Author: Dubinsky Evgeny
-    DateCreated: 10MAY2013
+    DateCreated: 10MAY2013]
+    Modified 05 Feb 2014 -- Boe Prox
+        -Add -WhatIf support
         
 .EXAMPLE
     Get-PSWSUSUpdateCategory | where { $_.Title -in @(
@@ -65,53 +67,56 @@ function Set-PSWSUSConfigProduct {
 
     Begin
     {
-        if ($wsus)
-        {
-            if($PSBoundParameters['Disable'])
-            {
-                $Collection = $wsus.GetSubscription().GetUpdateCategories()
-            }
-            else 
-            {
-                $Collection = New-Object -TypeName Microsoft.UpdateServices.Administration.UpdateCategoryCollection
-                
-            }
-            $Subscription = $wsus.GetSubscription()
-        }
-        else
+        if (-NOT $wsus)
         {
             Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server."
             Break
         }
+        if($PSBoundParameters['Disable'])
+        {
+            $Collection = $wsus.GetSubscription().GetUpdateCategories()
+        }
+        else 
+        {
+            $Collection = New-Object -TypeName Microsoft.UpdateServices.Administration.UpdateCategoryCollection
+                
+        }
+        $Subscription = $wsus.GetSubscription()
 
     }
     Process
     {            
-        if($PSBoundParameters['Disable'])
+        foreach ($ProductObject in $Product)
         {
-            foreach ($ProductObject in $Product)
-            {
-                $ProductTitle = $ProductObject.Title
-                $ProductType = $ProductObject.Type
-                Write-Debug "OOPS!"
-                if ($Collection.Title -notcontains $ProductTitle)
+            If ($PSCmdlet.ShouldProcess($productobject,'Set Configuration Product')) {
+                if($PSBoundParameters['Disable'])
                 {
-                    Write-Warning "$ProductType $ProductTitle not enable."
+                    $ProductTitle = $ProductObject.Title
+                    $ProductType = $ProductObject.Type
+                    if ($Collection.Title -notcontains $ProductTitle)
+                    {
+                        Write-Warning "$ProductType $ProductTitle not enable."
+                    }
+                    else
+                    {
+                        $Product | ForEach { 
+                            $Collection.Remove($_) 
+                        } 
+                    }
                 }
                 else
                 {
-                    $Product | % { $Collection.Remove($_) } 
+                    $Collection.Add($productobject) | Out-Null
                 }
             }
         }
-        else 
-        {
-            $Product | % { $Collection.Add($_) | Out-Null }
-        }
-        $Subscription.SetUpdateCategories($Collection)
+        
     }
     End
     {
-        $Subscription.Save()
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Configuration Product')) {
+            $Subscription.SetUpdateCategories($Collection)
+            $Subscription.Save()
+        }
     }
 }

@@ -28,60 +28,39 @@ function Get-PSWSUSClientGroupMembership {
     This command will retrieve the group membership/s of 'server1'. 
     
     .EXAMPLE  
-    Get-PSWSUSClient -computer "server1" | Get-PSWSUSClientGroupMembership
+    Get-PSWSUSClient -computername "server1" | Get-PSWSUSClientGroupMembership
 
     Description
     -----------      
     This command will retrieve the group membership/s of 'server1'. 
     
     .EXAMPLE  
-    Get-PSWSUSClient -computer "servers" | Get-PSWSUSClientGroupMembership
+    Get-PSWSUSClient -computername "servers" | Get-PSWSUSClientGroupMembership
 
     Description
     -----------      
     This command will retrieve the group membership/s of each server. 
            
     #> 
-    [cmdletbinding(
-    	DefaultParameterSetName = 'collection' 
-    )]
-        Param(
-            [Parameter(
-                Mandatory = $True,
-                Position = 0,
-                ParameterSetName = 'string',
-                ValueFromPipeline = $True)]
-                [string]$Computer,
-            [Parameter(            
-                Mandatory = $True,
-                Position = 0,
-                ParameterSetName = 'collection',
-                ValueFromPipeline = $True)]
-                [system.object]
-                [ValidateNotNullOrEmpty()]
-                $InputObject                                              
-                )   
-    Process {             
-        Switch ($pscmdlet.ParameterSetName) {        
-           "string" {
-                Write-Verbose "String parameter"
-                #Retrieve computer in WSUS
-                Try { 
-                    Write-Verbose "Searching for computer"     
-                    $client = Get-PSWSUSClient -Computer $Computer
-                } Catch {
-                    Write-Error "Unable to retrieve $($computer) from database."
-                } 
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $True,ValueFromPipeline = $True)]
+        [Alias('CN')]
+        [ValidateNotNullOrEmpty()]
+        $Computername                                          
+    )   
+    Process {  
+        ForEach ($Computer in $Computername) {
+            If (($Computer -is [Microsoft.UpdateServices.Internal.BaseApi.ComputerTarget])) {
+                $Client = $Computer
+            } Else {
+                $Client = Get-PSWSUSClient -Computername $Computer                
             }
-            "Collection" {
-                Write-Verbose "Collection parameter"
-                $client = $inputobject
-            }
+            #List group membership of client
+            $client | ForEach {
+                $Data = $_.GetComputerTargetGroups()
+                $data | Add-Member -MemberType NoteProperty -Name FullDomainName -Value $_.fulldomainname -PassThru 
+            }                   
         } 
-        #List group membership of client
-        $client | ForEach {
-            $Data = $_.GetComputerTargetGroups()
-            $data | Add-Member -MemberType NoteProperty -Name FullDomainName -Value $_.fulldomainname -PassThru 
-        }
     }
 }

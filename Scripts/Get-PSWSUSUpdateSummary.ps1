@@ -67,32 +67,28 @@ function Get-PSWSUSUpdateSummary {
             [Parameter(
                 Position = 0, ParameterSetName = 'Object',
                 ValueFromPipeline = $True)]
-                [Microsoft.UpdateServices.Internal.BaseApi.Update]$InputObject,
+                [Microsoft.UpdateServices.Internal.BaseApi.Update[]]$InputObject,
             [Parameter(
                 Position = 1,ParameterSetName = '')]
                 [Microsoft.UpdateServices.Administration.ComputerTargetScope]$ComputerScope                                                                  
         )
     Begin {                
-        $ErrorActionPreference = 'stop'
-        $hash = @{}  
-        If ($ComputerScope) {
-            $hash['ComputerScope'] = $ComputerScope
-        } Else {
+        $ErrorActionPreference = 'Stop'
+        If (-NOT $PSBoundParameters.ContainsKey('ComputerScope')) {
             Write-Verbose "Creating default Computer Scope"
-            $hash['ComputerScope'] = New-PSWSUSComputerScope
+            $ComputerScope = New-PSWSUSComputerScope
         }  
     }
     Process {
-        If ($PSBoundParameters['Update']) {
+        If ($PSBoundParameters.ContainsKey('Update')) {
             Write-Verbose "Gathering update data"
             $InputObject = Get-PSWSUSUpdate $update
         }
         Write-Verbose "Preparing report"
         ForEach ($Object in $InputObject) {
-            $data = $Object.GetSummary($hash['ComputerScope'])
-            If (-NOT ([string]::IsNullOrEmpty($Data.UpdateTitle))) {
-                Write-Output $Data
-            }
+            $data = $Object.GetSummary($ComputerScope)
+            $data.pstypenames.insert(0,'Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Update')
+            Write-Output $Data
         }
 
     }  

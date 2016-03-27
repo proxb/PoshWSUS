@@ -16,8 +16,11 @@ function Set-PSWsusConfigProxyServer {
     The port number that is used to connect to the proxy server. The default is port 80. 
     The port number must be greater than zero and less than 65536. 
 
-.PARAMETER ProxyCredential
-    The user name and password to use when accessing the proxy server. The name must be less than 256 characters. 
+.PARAMETER ProxyUserName
+    The user name to use when accessing the proxy server. The name must be less than 256 characters. 
+
+.PARAMETER ProxyUserDomain
+    The name of the domain that contains the user's logon account. The name must be less than 256 characters.
 	
 .PARAMETER ProxyPassword
     Password to use when accessing the proxy.
@@ -61,8 +64,8 @@ function Set-PSWsusConfigProxyServer {
 
 .EXAMPLE
     Set-PSWsusConfigProxyServer -UseProxy $true -ProxyName "proxy.domain.local" -ProxyServerPort "3128" `
-    -AnonymousProxyAccess $false -ProxyCredential (Get-Credential) -ProxyUserDomain "domain" `
-    -AllowProxyCredentialsOverNonSsl $true
+    -AnonymousProxyAccess $false -ProxyUserName "YourUserName" -ProxyUserDomain "domain" `
+    -ProxyPassword 'Password' -AllowProxyCredentialsOverNonSsl $true
 
 .NOTES
 	Name: Set-PSWsusConfigProxyServer
@@ -89,9 +92,10 @@ function Set-PSWsusConfigProxyServer {
         [alias("SslProxyServerPort")]
         [int]$ProxyServerPort,
         [ValidateLength(1, 255)]
-        [PSCredential]$ProxyCredential,
+        [string]$ProxyUserName,
         [ValidateLength(1, 255)]
         [string]$ProxyUserDomain,
+        $ProxyPassword,
         # Gets or sets whether a separate proxy should be used for SSL communications with the upstream server. 
         [switch]$UseSeparateProxyForSsl,
         [switch]$AnonymousProxyAccess,
@@ -106,68 +110,83 @@ function Set-PSWsusConfigProxyServer {
         If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Proxy Server')) {
             if ($PSBoundParameters['UseProxy'])
             {
-                $config.UseProxy = $True
+                $_wsusconfig.UseProxy = $True
             }
             else
             {
-                $config.UseProxy = $false
+                $_wsusconfig.UseProxy = $false
             }
 
             if ($PSBoundParameters['ProxyName'])
             {
-                $config.ProxyName = $ProxyName
+                $_wsusconfig.ProxyName = $ProxyName
             }#endif
         
             if ($PSBoundParameters['ProxyServerPort'])
             {
-                $config.ProxyServerPort = $ProxyServerPort
+                $_wsusconfig.ProxyServerPort = $ProxyServerPort
             }#endif
                 
-            if ($PSBoundParameters['ProxyCredential'] -ne $null)
+            if ($PSBoundParameters['ProxyUserName'] -ne $null)
             {
-                $config.ProxyUserName = $ProxyCredential.GetNetworkCredential().UserName
+                $_wsusconfig.ProxyUserName = $ProxyUserName
             }#endif
             else
             {
-                $config.ProxyUserName = $null
+                $_wsusconfig.ProxyUserName = $null
             }
 
             if ($PSBoundParameters['ProxyUserDomain'] -ne $null)
             {
-                $config.ProxyUserDomain = $ProxyUserDomain
+                $_wsusconfig.ProxyUserDomain = $ProxyUserDomain
             }#endif
             else
             {
-                $config.ProxyUserDomain = $null
-            }         
+                $_wsusconfig.ProxyUserDomain = $null
+            }
+         
+            if ($PSBoundParameters['ProxyPassword'])
+            {
+                # TO DO. Why Password dosen't set?
+                # Need secure connection with wsus
+                #$ProxyPassword = Read-Host -Prompt 'Enter Password' -AsSecureString
+                #$wsus.GetConfiguration().SetProxyPassword($ProxyPassword)
+            
+                Write-Warning "You need to specify password manually in console `n This issue we will fix in next release"
+            }#endif
+            elseif($PSBoundParameters['ProxyPassword'] -eq $null)
+            {
+                # if not SSL connection, ProxyPassword is read only
+                #$_wsusconfig.ProxyPassword  = $null
+            }
 
             if ($PSBoundParameters['AnonymousProxyAccess'])
             {
-                $config.AnonymousProxyAccess = $True
+                $_wsusconfig.AnonymousProxyAccess = $True
             }#endif
             else
             {
-                $config.AnonymousProxyAccess  = $true
+                $_wsusconfig.AnonymousProxyAccess  = $true
             }
 
             if ($PSBoundParameters['AllowProxyCredentialsOverNonSsl'])
             {
-                $config.AllowProxyCredentialsOverNonSsl = $True
+                $_wsusconfig.AllowProxyCredentialsOverNonSsl = $True
             }#endif
             else
             {
-                $config.AllowProxyCredentialsOverNonSsl  = $false
+                $_wsusconfig.AllowProxyCredentialsOverNonSsl  = $false
             }
                 
             if ($PSBoundParameters['UseSeparateProxyForSsl'])
             {
-                $config.UseSeparateProxyForSsl = $True
+                $_wsusconfig.UseSeparateProxyForSsl = $True
             }#endif
             else
             {
-                $config.UseSeparateProxyForSsl  = $false
+                $_wsusconfig.UseSeparateProxyForSsl  = $false
             }
 
-            $config.Save()
+            $_wsusconfig.Save()
         }
 }

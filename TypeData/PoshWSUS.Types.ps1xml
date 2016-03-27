@@ -39,14 +39,72 @@
     </Members>
   </Type>
 	<Type>
-    <Name>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary</Name>
+    <Name>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Update</Name>
     <Members>
-      <ScriptProperty>
-        <Name>ComputerGroup</Name>
-        <GetScriptBlock>
-          Get-WSUSGroup -Id $This.ComputerTargetGroupId | Select -Expand Name
-        </GetScriptBlock>
-      </ScriptProperty>
+        <AliasProperty>
+            <Name>
+                Installed                
+            </Name>
+            <ReferencedMemberName>
+                InstalledCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Downloaded                
+            </Name>
+            <ReferencedMemberName>
+                DownloadedCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Failed                
+            </Name>
+            <ReferencedMemberName>
+                FailedCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                PendingReboot                
+            </Name>
+            <ReferencedMemberName>
+                InstalledPendingRebootCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                NotApplicable                
+            </Name>
+            <ReferencedMemberName>
+                NotApplicableCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                NotInstalled                
+            </Name>
+            <ReferencedMemberName>
+                NotInstalledCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Unknown                
+            </Name>
+            <ReferencedMemberName>
+                UnknownCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Needed                
+            </Name>
+            <ReferencedMemberName>
+                NeededCount
+            </ReferencedMemberName>
+        </AliasProperty>
 		<ScriptProperty>
 			<Name>UpdateTitle</Name>
 			<GetScriptBlock>
@@ -57,12 +115,6 @@
 			<Name>UpdateKB</Name>
 			<GetScriptBlock>
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand KnowledgebaseArticles
-			</GetScriptBlock>
-		</ScriptProperty>
-		<ScriptProperty>
-			<Name>Computer</Name>
-			<GetScriptBlock>
-				$wsus.GetComputerTarget($This.ComputerTargetID) | Select -Expand FullDomainName
 			</GetScriptBlock>
 		</ScriptProperty>
 		<ScriptProperty>
@@ -92,12 +144,6 @@
 				<Name>Computername</Name>
 				<GetScriptBlock>
 					$This.GetComputerTarget().FullDomainName
-				</GetScriptBlock>
-			</ScriptProperty>
-			<ScriptProperty>
-				<Name>TargetGroup</Name>
-				<GetScriptBlock>
-					$This.GetUpdateApprovalTargetGroup().Name
 				</GetScriptBlock>
 			</ScriptProperty>
 			<ScriptProperty>
@@ -137,4 +183,195 @@
 			</ScriptProperty>
 		</Members>
 	</Type>	
+	<Type>
+    <Name>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group</Name>
+    <Members>
+        <AliasProperty>
+            <Name>
+                Installed                
+            </Name>
+            <ReferencedMemberName>
+                InstalledCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Downloaded                
+            </Name>
+            <ReferencedMemberName>
+                DownloadedCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Failed                
+            </Name>
+            <ReferencedMemberName>
+                FailedCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                PendingReboot                
+            </Name>
+            <ReferencedMemberName>
+                InstalledPendingRebootCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                NotApplicable                
+            </Name>
+            <ReferencedMemberName>
+                NotApplicableCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                NotInstalled                
+            </Name>
+            <ReferencedMemberName>
+                NotInstalledCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Unknown                
+            </Name>
+            <ReferencedMemberName>
+                UnknownCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Needed                
+            </Name>
+            <ReferencedMemberName>
+                NeededCount
+            </ReferencedMemberName>
+        </AliasProperty>
+      <ScriptProperty>
+        <Name>ComputerGroup</Name>
+        <GetScriptBlock>
+          $Wsus.GetComputerTargetGroup([guid]$This.ComputerTargetGroupId).Name
+        </GetScriptBlock>
+      </ScriptProperty>
+		<ScriptProperty>
+			<Name>UpdateTitle</Name>
+			<GetScriptBlock>
+				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand Title
+			</GetScriptBlock>
+		</ScriptProperty>
+		<ScriptProperty>
+			<Name>UpdateKB</Name>
+			<GetScriptBlock>
+				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand KnowledgebaseArticles
+			</GetScriptBlock>
+		</ScriptProperty>
+		<ScriptProperty>
+			<Name>NeededCount</Name>
+			<GetScriptBlock>
+				($This.DownloadedCount + $This.NotInstalledCount)
+			</GetScriptBlock>
+		</ScriptProperty>		
+	</Members>
+  </Type>
+  	<Type>
+    <Name>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Client</Name>
+    <Members>
+        <AliasProperty>
+            <Name>
+                Installed                
+            </Name>
+            <ReferencedMemberName>
+                InstalledCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Downloaded                
+            </Name>
+            <ReferencedMemberName>
+                DownloadedCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Failed                
+            </Name>
+            <ReferencedMemberName>
+                FailedCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                PendingReboot                
+            </Name>
+            <ReferencedMemberName>
+                InstalledPendingRebootCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                NotApplicable                
+            </Name>
+            <ReferencedMemberName>
+                NotApplicableCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                NotInstalled                
+            </Name>
+            <ReferencedMemberName>
+                NotInstalledCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Unknown                
+            </Name>
+            <ReferencedMemberName>
+                UnknownCount
+            </ReferencedMemberName>
+        </AliasProperty>
+        <AliasProperty>
+            <Name>
+                Needed                
+            </Name>
+            <ReferencedMemberName>
+                NeededCount
+            </ReferencedMemberName>
+        </AliasProperty>
+		<ScriptProperty>
+			<Name>Computer</Name>
+			<GetScriptBlock>
+				$wsus.GetComputerTarget($This.ComputerTargetID) | Select -Expand FullDomainName
+			</GetScriptBlock>
+		</ScriptProperty>
+		<ScriptProperty>
+			<Name>NeededCount</Name>
+			<GetScriptBlock>
+				($This.DownloadedCount + $This.NotInstalledCount)
+			</GetScriptBlock>
+		</ScriptProperty>		
+	</Members>
+  </Type>
+	<Type>
+    <Name>Microsoft.UpdateServices.Administrator.UpdateRevisionID</Name>
+    <Members>
+		<ScriptProperty>
+			<Name>UpdateTitle</Name>
+			<GetScriptBlock>
+				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand Title
+			</GetScriptBlock>
+		</ScriptProperty>
+		<ScriptProperty>
+			<Name>UpdateKB</Name>
+			<GetScriptBlock>
+				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand KnowledgebaseArticles
+			</GetScriptBlock>
+		</ScriptProperty>	
+	</Members>
+  </Type>
 </Types>

@@ -75,7 +75,7 @@ function Get-PSWSUSUpdatePerClient {
     }
     Process {
         If ($PSBoundParameters['ComputerName']) {
-            $hash['ComputerObject'] = Get-PSWSUSClient -Computer $Computername
+            $hash['ComputerObject'] = Get-PSWSUSClient -Computername $Computername
         } ElseIf ($PSBoundParameters['ComputerObject']) {
             $hash['ComputerObject'] = $ComputerObject
         } Else {

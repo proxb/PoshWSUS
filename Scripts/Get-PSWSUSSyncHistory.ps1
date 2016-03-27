@@ -21,10 +21,6 @@ function Get-PSWSUSSyncHistory {
     #> 
     [cmdletbinding()]  
     Param () 
-    Begin {
-        $sub = $wsus.GetSubscription()
-    }
-    Process {
-        $sub.GetSynchronizationHistory()      
-    }
+    $Subscription = $wsus.GetSubscription()
+    $Subscription.GetSynchronizationHistory()     
 } 

@@ -86,9 +86,15 @@ function Get-PSWSUSUpdateSummaryPerGroup {
             ForEach ($Object in $hash['UpdateObject']) {
                 Try {
                     If ($PSBoundParameters['IncludeChildGroup']) {
-                        $Object.GetSummaryForComputerTargetGroup($hash['GroupObject'],$True)
+                        $Object.GetSummaryForComputerTargetGroup($hash['GroupObject'],$True) | ForEach {
+                            $_.pstypenames.insert(0,'Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group')
+                            $_
+                        }
                     } Else {
-                        $Object.GetSummaryForComputerTargetGroup($hash['GroupObject'],$False)
+                        $Object.GetSummaryForComputerTargetGroup($hash['GroupObject'],$False) | ForEach {
+                            $_.pstypenames.insert(0,'Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group')
+                            $_
+                        }
                     }
                 } Catch {
                     Write-Warning ("{0}" -f $_.Exception.Message)
@@ -99,9 +105,15 @@ function Get-PSWSUSUpdateSummaryPerGroup {
             ForEach ($Object in $hash['UpdateObject']) {
                 Try {            
                     If ($PSBoundParameters['IncludeChildGroup']) {
-                        $Object.GetSummaryPerComputerTargetGroup($True)
+                        $Object.GetSummaryPerComputerTargetGroup($True) | ForEach {
+                            $_.pstypenames.insert(0,'Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group')
+                            $_
+                        }
                     } Else {
-                        $Object.GetSummaryPerComputerTargetGroup($False)
+                        $Object.GetSummaryPerComputerTargetGroup($False) | ForEach {
+                            $_.pstypenames.insert(0,'Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group')
+                            $_
+                        }
                     }
                 } Catch {
                     Write-Warning ("{0}" -f $_.Exception.Message)

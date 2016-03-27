@@ -22,5 +22,5 @@ function Get-PSWSUSCommand {
     Param () 
 
     #List all WSUS functions available
-    Get-Command -Module PSWSUS
+    Get-Command -Module PoshWSUS
 }

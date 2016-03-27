@@ -23,6 +23,8 @@ function Get-PSWSUSConfigSupportedUpdateLanguages {
         Name: Get-PSWSUSConfigSupportedUpdateLanguages
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified: 06 Feb 2014 -- Boe Prox
+            -Removed instances where set actions are occuring
 
 	.LINK
 		http://blog.itstuff.in.ua/?p=62#Get-PSWSUSConfigSupportedUpdateLanguages
@@ -37,27 +39,11 @@ function Get-PSWSUSConfigSupportedUpdateLanguages {
     Param
     (
     )
-
-    Begin
+    if($wsus)
     {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-        }#endif
-        else
-        {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
-            Break
-        }
-    }
-    Process
-    { 
-        Write-Verbose "Getting WSUS Supported Update Languages"
-        $config.SupportedUpdateLanguages -as [System.Collections.Specialized.StringCollection]
-    }
-    End{
-        
-    }
+        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Break
+    } 
+    Write-Verbose "Getting WSUS Supported Update Languages"
+    $_wsusconfig.SupportedUpdateLanguages
 }

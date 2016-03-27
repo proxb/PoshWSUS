@@ -21,10 +21,10 @@ function Get-PSWSUSEvent {
     #> 
     [cmdletbinding()]  
     Param () 
-    Begin {
-        $sub = $wsus.GetSubscription()
-    }
-    Process {
-        $sub.GetEventHistory()      
-    }
+    $Subscription = $wsus.GetSubscription()
+    $Subscription.GetEventHistory() | ForEach {
+        $_ | Add-Member -MemberType NoteProperty -Name EventID -Value ($_.Row.EventID) -PassThru |
+        Add-Member -MemberType NoteProperty -Name SourceID -Value ($_.Row.SourceID) -PassThru |
+        Add-Member -MemberType NoteProperty -Name SeverityId -Value ($_.Row.SeverityId) -PassThru         
+    }       
 }

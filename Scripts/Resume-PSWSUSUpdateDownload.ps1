@@ -25,34 +25,37 @@ function Resume-PSWSUSUpdateDownload {
     This command will resume the download of update KB956896 that was previously cancelled.       
     #> 
     [cmdletbinding(
-    	DefaultParameterSetName = 'update',
     	ConfirmImpact = 'low',
         SupportsShouldProcess = $True
     )]
     Param(
-        [Parameter(
-            Mandatory = $True,
-            Position = 0,
-            ParameterSetName = 'update',
-            ValueFromPipeline = $True)]
-            [string]$Update                                          
-            ) 
+    [Parameter(Mandatory = $True,ValueFromPipeline = $True,ParameterSetName='Update')]
+    $Update,
+    [parameter(ParameterSetName='AllUpdates')]
+    [switch]$AllUpdates                                          
+    ) 
     Begin {
-        #Gather all updates from given information
-        Write-Verbose "Searching for updates"
-        $patches = $wsus.SearchUpdates($update)
+        $List = New-Object System.Collections.ArrayList
     }                
     Process {
-        If ($patches) {
-            ForEach ($patch in $patches) {
+        If ($pscmdlet.ParameterSetName -eq 'Update') {
+            If ($Update -is [Microsoft.UpdateServices.Internal.BaseApi.Update]) {
+                [void]$List.Add($Update)
+            } Else {
+                $List.AddRange(@(Get-PSWSUSUpdate $Update))
+            }
+            ForEach ($patch in $List) {
                 Write-Verbose "Resuming update download"                
                 If ($pscmdlet.ShouldProcess($($patch.title))) {
                     $patch.ResumeDownload()
-                    "$($patch.title) download has been resumed."
+                    Write-Verbose "$($patch.title) download has been resumed."
                 }         
-            }
-        } Else {
-            Write-Warning "No patches found needing to resume download!"
-        }        
-    }    
+            }  
+        } ElseIf ($pscmdlet.ParameterSetName -eq 'AllUpdates') {
+            If ($pscmdlet.ShouldProcess($($wsus.name))) {
+                $wsus.ResumeAllDownloads()
+                Write-Verbose "Downloads have been resumed on {0}." -f $wsus.name
+            }            
+        }     
+    }   
 } 

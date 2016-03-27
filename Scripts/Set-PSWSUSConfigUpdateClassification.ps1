@@ -6,7 +6,7 @@ function Set-PSWSUSConfigUpdateClassification {
         synchronizes are enabled or disabled.
     
     .DESCRIPTION
-        The Set-PSWSUSClassification cmdlet enables or disables the category of updates
+        The Set-PSWsusClassification cmdlet enables or disables the category of updates
         (for example security or critical) to be synchronized.
 
         Using this cmdlet without filtering results. Get-PSWSUSUpdateClassification cmdlet must be run,
@@ -27,6 +27,9 @@ function Set-PSWSUSConfigUpdateClassification {
         Name: Set-PSWSUSConfigUpdateClassification
         Author: Dubinsky Evgeny
         DateCreated: 10MAY2013
+        Modified 05 Feb 2014 -- Boe Prox
+            -Changed aliases to expanded name
+            -Added -WhatIf support
     
     .EXAMPLE
         Get-PSWSUSUpdateClassification | Set-PSWSUSConfigUpdateClassification
@@ -52,7 +55,7 @@ function Set-PSWSUSConfigUpdateClassification {
     .LINK
         http://blog.itstuff.in.ua/?p=62#Set-PSWSUSConfigUpdateClassification
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$True)]
     Param
     (
         [Parameter(
@@ -60,59 +63,60 @@ function Set-PSWSUSConfigUpdateClassification {
             Position = 0,
             ValueFromPipeline = $True)]
             [Microsoft.UpdateServices.Administration.UpdateClassificationCollection]$Classification,
-        [Parameter(
-            Mandatory = $false,
-            Position = 1,
-            ValueFromPipeline = $false)]
+        [Parameter()]
             [switch]$Disable
     )
 
     Begin
     {
-        if($wsus)
-        {
-            if($PSBoundParameters['Disable'])
-            {
-                $Collection = $wsus.GetSubscription().GetUpdateClassifications()
-            }
-            else 
-            {
-                $Collection = New-Object -TypeName Microsoft.UpdateServices.Administration.UpdateClassificationCollection
-                
-            }
-            $Subscription = $wsus.GetSubscription()
-        }
-        else
+        if(-NOT $wsus)
         {
             Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
             Break
         }
-    }
-    Process
-    { 
         if($PSBoundParameters['Disable'])
         {
-            foreach ($Class in $Classification)
-            {
-                $ClassTitle = $Class.Title
-                if ($Collection.Title -notcontains $ClassTitle)
-                {
-                    Write-Warning "Class $ClassTitle not enable."
-                }
-                else
-                {
-                    $Classification | % { $Collection.Remove($_) } 
-                }
-            }
+            $Collection = $wsus.GetSubscription().GetUpdateClassifications()
         }
         else 
         {
-            $Classification | % { $Collection.Add($_) | Out-Null }
+            $Collection = New-Object -TypeName Microsoft.UpdateServices.Administration.UpdateClassificationCollection
+                
         }
-        $Subscription.SetUpdateClassifications($Collection)
+        $Subscription = $wsus.GetSubscription()
+    }
+    Process
+    { 
+        foreach ($Class in $Classification)
+        {    
+            If ($PSCmdlet.ShouldProcess($class, 'Set Update Config Classification')) {        
+                if($PSBoundParameters['Disable'])
+                {
+                    $ClassTitle = $Class.Title
+                    if ($Collection.Title -notcontains $ClassTitle)
+                    {
+                        Write-Warning "Class $ClassTitle not enable."
+                    }
+                    else
+                    {
+                        $Classification | ForEach { 
+                            $Collection.Remove($_) 
+                        } 
+                    }
+                } 
+                else
+                {
+                    $Collection.Add($class) | Out-Null 
+                }
+            }
+        }
+        
     }
     End
     {
-        $Subscription.Save()
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName, 'Set Update Config Classification')) {  
+            $Subscription.SetUpdateClassifications($Collection)
+            $Subscription.Save()
+        }
     }
 }

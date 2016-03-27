@@ -22,13 +22,13 @@ function Remove-PSWSUSClient {
     -----------      
     This command will remove 'server1' from WSUS. 
     .EXAMPLE  
-    Get-PSWSUSClient -computer "server1" | Remove-PSWSUSClient
+    Get-PSWSUSClient -computername "server1" | Remove-PSWSUSClient
 
     Description
     -----------      
     This command will remove 'server1' from WSUS. 
     .EXAMPLE  
-    Get-PSWSUSClient -computer "serv" | Remove-PSWSUSClient 
+    Get-PSWSUSClient -computername "serv" | Remove-PSWSUSClient 
     
     Description
     -----------      
@@ -57,7 +57,7 @@ function Remove-PSWSUSClient {
                         $computer.Delete()
                     }                
                 } Elseif ($Computer -is [string]) {
-                    $client = Get-PSWSUSClient $Computer
+                    $client = Get-PSWSUSClient -Computername $Computer
                     If ($pscmdlet.ShouldProcess($client.FullDomainName)) {
                         Write-Verbose "Removing $($client.FullDomainName) from WSUS"
                         $client.Delete()

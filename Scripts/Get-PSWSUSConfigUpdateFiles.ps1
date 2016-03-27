@@ -29,9 +29,9 @@ function Get-PSWSUSConfigUpdateFiles {
     {
         if($wsus)
         {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
+            $_wsusconfig = $wsus.GetConfiguration()
+            $_wsusconfig.ServerId = [System.Guid]::NewGuid()
+            $_wsusconfig.Save()
         }#endif
         else
         {

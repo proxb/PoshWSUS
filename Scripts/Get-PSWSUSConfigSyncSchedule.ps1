@@ -20,6 +20,8 @@ function Get-PSWSUSConfigSyncSchedule {
 		Name: Get-PSWSUSConfigSyncSchedule
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified: 05 Feb 2014 -- Boe Prox
+            -Removed Begin,Process, End as no pipeline is supported
 
 	.LINK
 		http://blog.itstuff.in.ua/?p=62#Get-PSWSUSConfigSyncSchedule
@@ -29,24 +31,15 @@ function Get-PSWSUSConfigSyncSchedule {
     [CmdletBinding()]
     Param()
 
-    Begin
-    {
         if($wsus)
-        {
-            $subscription = $wsus.GetSubscription()
-        }#endif
-        else
         {
             Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
             Break
         }
-    }
-    Process
-    {
         Write-Verbose "Getting WSUS update source configuration"
-                       
+        $subscription = $wsus.GetSubscription()                       
         $subscription | select SynchronizeAutomatically,SynchronizeAutomaticallyTimeOfDay, NumberOfSynchronizationsPerDay
         
-    }
-    End{}
+
+
 }

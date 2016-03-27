@@ -32,8 +32,8 @@ function Set-PSWSUSEmailConfig {
     .PARAMETER SmtpServerRequiresAuthentication
         Used if smtp server requires authentication
         
-    .PARAMETER SMTPCredential  
-        Credential to submit if required by smtp server
+    .PARAMETER SmtpUserName  
+        Username to submit if required by smtp server
         
     .PARAMETER StatusNotificationFrequency
         Frequency (Daily or Weekly) to send notifications
@@ -43,6 +43,9 @@ function Set-PSWSUSEmailConfig {
         
     .PARAMETER UpdateServer
         Name of the WSUS update server
+        
+    .PARAMETER SmtpPassword
+        Password to user for smtp server connection. 
     
     .PARAMETER PassThru
         Displays object after completion
@@ -102,7 +105,7 @@ function Set-PSWSUSEmailConfig {
         [Parameter(
             Mandatory = $False, Position = 8,
             ParameterSetName = 'account', ValueFromPipeline = $False)]
-            [PSCredential]$SMTPCredential,
+            [string]$SmtpUserName,
         [Parameter(
             Mandatory = $False, Position = 9,
             ParameterSetName = '', ValueFromPipeline = $False)]
@@ -114,7 +117,11 @@ function Set-PSWSUSEmailConfig {
         [Parameter(
             Mandatory = $False,Position = 11,
             ParameterSetName = '',ValueFromPipeline = $False)]
-            [string]$UpdateServer                                                                                                                                                            
+            [string]$UpdateServer,
+        [Parameter(
+            Mandatory = $False,Position = 12,
+            ParameterSetName = 'account',ValueFromPipeline = $False)]
+            [string]$SmtpPassword                                                                                                                                                              
     )
     Begin {   
         #Configure Email Notifications
@@ -149,10 +156,8 @@ function Set-PSWSUSEmailConfig {
             } Else {
                 $email.SmtpServerRequiresAuthentication = $False
             }
-            If ($SMTPCredential) {
-                $email.SmtpUserName = $SMTPCredential.GetNetworkCredential().UserName
-                $mail.SetSmtpUserPassword($SMTPCredential.GetNetworkCredential().Password)
-            }
+            If ($SmtpUserName) {$email.SmtpUserName = $SmtpUserName}
+            If ($SmtpPassword) {$mail.SetSmtpUserPassword($SmtpPassword)}
             Switch ($StatusNotificationFrequency) {
                 "Daily" {$email.StatusNotificationFrequency = [Microsoft.UpdateServices.Administration.EmailStatusNotificationFrequency]::Daily}
                 "Weekly" {$email.StatusNotificationFrequency = [Microsoft.UpdateServices.Administration.EmailStatusNotificationFrequency]::Weekly}

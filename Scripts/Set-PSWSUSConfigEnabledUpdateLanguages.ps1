@@ -52,41 +52,37 @@ function Set-PSWSUSConfigEnabledUpdateLanguages {
 
     Begin
     {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-            
-            if($PSBoundParameters['Language'])
-            {
-                $objects = @()
-                $config.AllUpdateLanguagesEnabled = $false
-            }#endif
-        }#endif
-        else
+        if(-NOT $wsus)
         {
             Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
             Break
-        }#endelse
+        }
+
+        if($PSBoundParameters['Language'])
+        {
+            $objects = @()
+            $_wsusconfig.AllUpdateLanguagesEnabled = $false
+        }#endif
     }
     Process
-    { 
-            if($PSBoundParameters['Language'])
-            {
-                    [System.Collections.Specialized.StringCollection]$objects += $Language
-            }#endif
-            if($PSBoundParameters['AllUpdateLanguagesEnabled'])
-            {
-                    $config.AllUpdateLanguagesEnabled = $true
-            }#endif
+    {
+        if($PSBoundParameters['Language'])
+        {
+            [System.Collections.Specialized.StringCollection]$objects += $Language
+        }#endif
     }
     End{
-        Write-Verbose "Setting Languages for wsus updates."
-        if ($AllUpdateLanguagesEnabled -eq $false)
+        if($PSBoundParameters['AllUpdateLanguagesEnabled'])
         {
-            $config.SetEnabledUpdateLanguages($objects)            
+            $_wsusconfig.AllUpdateLanguagesEnabled = $true
         }#endif
-        $config.Save()
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Update Languages')) {
+            Write-Verbose "Setting Languages for wsus updates."
+            if ($AllUpdateLanguagesEnabled -eq $false)
+            {
+                $_wsusconfig.SetEnabledUpdateLanguages($objects)            
+            }#endif
+            $_wsusconfig.Save()
+        }
     }
 }

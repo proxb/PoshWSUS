@@ -329,18 +329,13 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>ID</Label>
-            <Width>20</Width>
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
             <Label>StartTime</Label>
-            <Width>20</Width>
+            <Width>30</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>EndTime</Label>
-            <Width>20</Width>
+            <Width>30</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
@@ -357,9 +352,6 @@
         <TableRowEntries>
           <TableRowEntry>
             <TableColumnItems>
-              <TableColumnItem>
-                <PropertyName>ID</PropertyName>
-              </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>StartTime</PropertyName>
               </TableColumnItem>
@@ -442,22 +434,17 @@
         <TableHeaders>
           <TableColumnHeader>
             <Label>Type</Label>
-            <Width>20</Width>
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>Id</Label>
-            <Width>20</Width>
+            <Width>15</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Title</Label>
-            <Width>20</Width>
+            <Width>35</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>UpdateSource</Label>
-            <Width>25</Width>
+            <Width>18</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
@@ -471,9 +458,6 @@
             <TableColumnItems>
               <TableColumnItem>
                 <PropertyName>Type</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>Id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Title</PropertyName>
@@ -497,23 +481,13 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>Id</Label>
-            <Width>20</Width>
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
             <Label>Title</Label>
             <Width>20</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Description</Label>
-            <Width>20</Width>
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>ReleaseNotes</Label>
-            <Width>25</Width>
+            <Width>40</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
@@ -526,16 +500,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Id</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
                 <PropertyName>Title</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Description</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>ReleaseNotes</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>ArrivalDate</PropertyName>
@@ -700,73 +668,65 @@
 		  </ListControl>
 	  </View>
 	<View>
-		  <Name>Update</Name>
-		  <ViewSelectedBy>
-			  <TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary</TypeName>
-		  </ViewSelectedBy>
-		  <TableControl>
-			  <TableHeaders>
-				  <TableColumnHeader>
-					  <Label>UpdateTitle</Label>
-					  <Width>30</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
-					  <Label>ComputerGroup</Label>
-					  <Width>20</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
-					  <Label>Computer</Label>
-					  <Width>25</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
-					  <Label>InstalledCount</Label>
-					  <Width>15</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
-					  <Label>NeededCount</Label>
-					  <Width>17</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
-					  <Label>FailedCount</Label>
-					  <Width>11</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-			  </TableHeaders>
-			  <TableRowEntries>
-				  <TableRowEntry>
-					  <TableColumnItems>
-						  <TableColumnItem>
-							  <PropertyName>UpdateTitle</PropertyName>
-						  </TableColumnItem>
-						  <TableColumnItem>
-							  <PropertyName>ComputerGroup</PropertyName>
-						  </TableColumnItem>
-						  <TableColumnItem>
-							  <PropertyName>Computer</PropertyName>
-						  </TableColumnItem>
-						  <TableColumnItem>
-							  <PropertyName>InstalledCount</PropertyName>
-						  </TableColumnItem>
-						  <TableColumnItem>
-							  <PropertyName>NeededCount</PropertyName>
-						  </TableColumnItem>
-						  <TableColumnItem>
-							  <PropertyName>FailedCount</PropertyName>
-						  </TableColumnItem>
-					  </TableColumnItems>
-				  </TableRowEntry>
-			  </TableRowEntries>
-		  </TableControl>
-	  </View>
+		<Name>Update</Name>
+		<ViewSelectedBy>
+			<TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Update</TypeName>
+		</ViewSelectedBy>
+		<TableControl>
+			<TableHeaders>
+				<TableColumnHeader>
+					<Label>UpdateTitle</Label>
+					<Width>46</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Installed</Label>
+					<Width>9</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Needed</Label>
+					<Width>6</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Failed</Label>
+					<Width>6</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>PendingReboot</Label>
+					<Width>13</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+			</TableHeaders>
+			<TableRowEntries>
+				<TableRowEntry>
+					<TableColumnItems>
+						<TableColumnItem>
+							<PropertyName>UpdateTitle</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Installed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Needed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Failed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>PendingReboot</PropertyName>
+						</TableColumnItem>
+					</TableColumnItems>
+				</TableRowEntry>
+			</TableRowEntries>
+		</TableControl>
+	</View>
 	<View>
 		  <Name>Update</Name>
 		  <ViewSelectedBy>
-			  <TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary</TypeName>
+			  <TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Update</TypeName>
 		  </ViewSelectedBy>
 		  <ListControl>
 			  <ListEntries>
@@ -779,28 +739,22 @@
 							  <PropertyName>UpdateKB</PropertyName>
 						  </ListItem>
 						  <ListItem>
-							  <PropertyName>InstalledCount</PropertyName>
+							  <PropertyName>Installed</PropertyName>
 						  </ListItem>
 						  <ListItem>
-							  <PropertyName>NotInstalledCount</PropertyName>
+							  <PropertyName>NotInstalled</PropertyName>
 						  </ListItem>
 						  <ListItem>
-							  <PropertyName>NeededCount</PropertyName>
+							  <PropertyName>Needed</PropertyName>
 						  </ListItem>
 						  <ListItem>
-							  <PropertyName>FailedCount</PropertyName>
+							  <PropertyName>Failed</PropertyName>
 						  </ListItem>
 						  <ListItem>
-							  <PropertyName>InstalledPendingRebootCount</PropertyName>
+							  <PropertyName>PendingReboot</PropertyName>
 						  </ListItem>
 						  <ListItem>
 							  <PropertyName>LastUpdated</PropertyName>
-						  </ListItem>
-						  <ListItem>
-							  <PropertyName>ComputerGroup</PropertyName>
-						  </ListItem>
-						  <ListItem>
-							  <PropertyName>Computer</PropertyName>
 						  </ListItem>
 					  </ListItems>
 				  </ListEntry>
@@ -817,11 +771,6 @@
 				  <TableColumnHeader>
 					  <Label>Computername</Label>
 					  <Width>20</Width>
-					  <Alignment>Left</Alignment>
-				  </TableColumnHeader>
-				  <TableColumnHeader>
-					  <Label>TargetGroup</Label>
-					  <Width>25</Width>
 					  <Alignment>Left</Alignment>
 				  </TableColumnHeader>
 				  <TableColumnHeader>
@@ -850,9 +799,6 @@
 					  <TableColumnItems>
 						  <TableColumnItem>
 							  <PropertyName>Computername</PropertyName>
-						  </TableColumnItem>
-						  <TableColumnItem>
-							  <PropertyName>TargetGroup</PropertyName>
 						  </TableColumnItem>
 						  <TableColumnItem>
 							  <PropertyName>UpdateKB</PropertyName>
@@ -884,9 +830,6 @@
 							  <PropertyName>Computername</PropertyName>
 						  </ListItem>
 						  <ListItem>
-							  <PropertyName>TargetGroup</PropertyName>
-						  </ListItem>
-						  <ListItem>
 							  <PropertyName>UpdateKB</PropertyName>
 						  </ListItem>
 						  <ListItem>
@@ -914,8 +857,8 @@
 		  <TableControl>
 			  <TableHeaders>
 				  <TableColumnHeader>
-					  <Label>ID</Label>
-					  <Width>40</Width>
+					  <Label>FullDomainName</Label>
+					  <Width>30</Width>
 					  <Alignment>Left</Alignment>
 				  </TableColumnHeader>
 				  <TableColumnHeader>
@@ -933,7 +876,7 @@
 				  <TableRowEntry>
 					  <TableColumnItems>
 						  <TableColumnItem>
-							  <PropertyName>ID</PropertyName>
+							  <PropertyName>FullDomainName</PropertyName>
 						  </TableColumnItem>
 						  <TableColumnItem>
 							  <PropertyName>Name</PropertyName>
@@ -1002,5 +945,249 @@
 			  </TableRowEntries>
 		  </TableControl>
 	  </View>	  
+	<View>
+		<Name>Update</Name>
+		<ViewSelectedBy>
+			<TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Client</TypeName>
+		</ViewSelectedBy>
+		<TableControl>
+			<TableHeaders>
+				<TableColumnHeader>
+					<Label>Computer</Label>
+					<Width>25</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Installed</Label>
+					<Width>9</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Needed</Label>
+					<Width>6</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Failed</Label>
+					<Width>6</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>PendingReboot</Label>
+					<Width>14</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+			</TableHeaders>
+			<TableRowEntries>
+				<TableRowEntry>
+					<TableColumnItems>
+						<TableColumnItem>
+							<PropertyName>Computer</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Installed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Needed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Failed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>PendingReboot</PropertyName>
+						</TableColumnItem>
+					</TableColumnItems>
+				</TableRowEntry>
+			</TableRowEntries>
+		</TableControl>
+	</View>
+	<View>
+		  <Name>Update</Name>
+		  <ViewSelectedBy>
+			  <TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Client</TypeName>
+		  </ViewSelectedBy>
+		  <ListControl>
+			  <ListEntries>
+				  <ListEntry>
+					  <ListItems>
+						  <ListItem>
+							  <PropertyName>InstalledCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>NotInstalledCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>NeededCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>FailedCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>InstalledPendingRebootCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>LastUpdated</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>Computer</PropertyName>
+						  </ListItem>
+					  </ListItems>
+				  </ListEntry>
+			  </ListEntries>
+		  </ListControl>
+	  </View>
+	<View>
+		<Name>Update</Name>
+		<ViewSelectedBy>
+			<TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group</TypeName>
+		</ViewSelectedBy>
+		<TableControl>
+			<TableHeaders>
+				<TableColumnHeader>
+					<Label>UpdateTitle</Label>
+					<Width>30</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>ComputerGroup</Label>
+					<Width>20</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Installed</Label>
+					<Width>9</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Needed</Label>
+					<Width>6</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>Failed</Label>
+					<Width>6</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+				<TableColumnHeader>
+					<Label>PendingReboot</Label>
+					<Width>13</Width>
+					<Alignment>Left</Alignment>
+				</TableColumnHeader>
+			</TableHeaders>
+			<TableRowEntries>
+				<TableRowEntry>
+					<TableColumnItems>
+						<TableColumnItem>
+							<PropertyName>UpdateTitle</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>ComputerGroup</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Installed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Needed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>Failed</PropertyName>
+						</TableColumnItem>
+						<TableColumnItem>
+							<PropertyName>PendingReboot</PropertyName>
+						</TableColumnItem>
+					</TableColumnItems>
+				</TableRowEntry>
+			</TableRowEntries>
+		</TableControl>
+	</View>
+	<View>
+		  <Name>Update</Name>
+		  <ViewSelectedBy>
+			  <TypeName>Microsoft.UpdateServices.Internal.BaseApi.UpdateSummary.Group</TypeName>
+		  </ViewSelectedBy>
+		  <ListControl>
+			  <ListEntries>
+				  <ListEntry>
+					  <ListItems>
+						  <ListItem>
+							  <PropertyName>UpdateTitle</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>UpdateKB</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>InstalledCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>NotInstalledCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>NeededCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>FailedCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>InstalledPendingRebootCount</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>LastUpdated</PropertyName>
+						  </ListItem>
+						  <ListItem>
+							  <PropertyName>ComputerGroup</PropertyName>
+						  </ListItem>
+					  </ListItems>
+				  </ListEntry>
+			  </ListEntries>
+		  </ListControl>
+	  </View>
+    <View>
+      <Name>ComputerTarget</Name>
+      <ViewSelectedBy>
+        <TypeName>Microsoft.UpdateServices.Administration.UpdateRevisionID</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>UpdateID</Label>
+            <Width>36</Width>
+            <Alignment>Left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>UpdateTitle</Label>
+            <Width>20</Width>
+            <Alignment>Left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>UpdateKB</Label>
+            <Width>10</Width>
+            <Alignment>Left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>RevisionNumber</Label>
+            <Width>14</Width>
+            <Alignment>Right</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>UpdateID</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>UpdateTitle</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>UpdateKB</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>RevisionNumber</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 </Configuration>

@@ -10,6 +10,9 @@ function Get-PSWSUSConfigSyncUpdateClassifications {
         Name: Get-PSWSUSConfigSyncUpdateCategories
         Author: Dubinsky Evgeny
         DateCreated: 10MAY2013
+        Modified: 05 Feb 2014 -- Boe Prox
+            -Modified If statement
+            -Removed Begin, Process, End
 
     .EXAMPLE
        Get-PSWSUSConfigSyncUpdateClassifications
@@ -24,18 +27,13 @@ function Get-PSWSUSConfigSyncUpdateClassifications {
     [CmdletBinding(DefaultParameterSetName = 'Null')]
     Param()
 
-    Begin {}
-    Process
+
+    if ($wsus)
     {
-        if ($wsus)
-        {
-            $wsus.GetSubscription().GetUpdateClassifications()
-        }
-        else
-        {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
-            Break
-        }
+        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Break
     }
-    End{}
+    $wsus.GetSubscription().GetUpdateClassifications()
+
+
 }

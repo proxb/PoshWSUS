@@ -59,6 +59,10 @@ function Set-PSWSUSConfigUpdateSource {
 		Name: Set-PSWSUSConfigUpdateSource
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified 05 Feb 2014 -- Boe Prox
+            -Switched [bool] parameter types to [switch] to align with best practices
+            -Removed Begin,Process, End as no params support pipeline
+            -Added -WhatIf support
 
     .LINK
         http://blog.itstuff.in.ua/?p=62#Set-PSWSUSConfigUpdateSource
@@ -78,59 +82,50 @@ function Set-PSWSUSConfigUpdateSource {
     .LINK
         http://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.updateservices.administration.iupdateserverconfiguration.upstreamwsusserverusessl(v=vs.85).aspx
 
-	.LINK
-		http://blog.itstuff.in.ua
-
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$True)]
     Param
     (
-        [Parameter(Position = 0,Mandatory=$true)][Boolean]$SyncFromMicrosoftUpdate,
+        [Switch]$SyncFromMicrosoftUpdate,
         [string]$UpstreamWsusServerName,
         [ValidateRange(0, 65536)]
         [int]$UpstreamWsusServerPortNumber,
-        [Boolean]$UpstreamWsusServerUseSsl = $false,
-        [Boolean]$IsReplicaServer = $false
+        [Switch]$UpstreamWsusServerUseSsl,
+        [Switch]$IsReplicaServer
     )
 
-    Begin
+    if(-NOT $wsus)
     {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-        }#endif
-        else
-        {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
-            Break
-        }
+        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Break
     }
-    Process
-    {
-        $config.SyncFromMicrosoftUpdate = $SyncFromMicrosoftUpdate
+    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'UpdateConfigSource')) {
+        if($PSBoundParameters['SyncFromMicrosoftUpdate']) {
+            $_wsusconfig.SyncFromMicrosoftUpdate = $True
+        }
         
-        if($PSBoundParameters['SyncFromMicrosoftUpdate'] -eq $true)
+        if($PSBoundParameters['SyncFromMicrosoftUpdate'])
         {
-            $config.IsReplicaServer = $false
+            $_wsusconfig.IsReplicaServer = $false
         }#endif
+
         if($PSBoundParameters['UpstreamWsusServerName'] -and $PSBoundParameters['UpstreamWsusServerPortNumber'])
         {
-            $config.UpstreamWsusServerName = $UpstreamWsusServerName
-            $config.UpstreamWsusServerPortNumber = $UpstreamWsusServerPortNumber
+            $_wsusconfig.UpstreamWsusServerName = $UpstreamWsusServerName
+            $_wsusconfig.UpstreamWsusServerPortNumber = $UpstreamWsusServerPortNumber
         }#endif
         
-        # Default UpstreamWsusServerUseSsl equels $false
-        $config.UpstreamWsusServerUseSsl = $UpstreamWsusServerUseSsl
+        # Default UpstreamWsusServerUseSsl equals $false
+        if($PSBoundParameters['UpstreamWsusServerUseSsl']) {
+            $_wsusconfig.UpstreamWsusServerUseSsl = $True
+        }
         
-        # Default IsReplicaServer equels $false
-        $config.IsReplicaServer = $IsReplicaServer
+        # Default IsReplicaServer equals $false
+        if($PSBoundParameters['IsReplicaServer']) {
+            $_wsusconfig.IsReplicaServer = $True
+        }
         
-    }
-    End
-    {
-        $config.Save()
+        $_wsusconfig.Save()
     }
 }

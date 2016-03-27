@@ -106,7 +106,7 @@ function Get-PSWSUSUpdate {
        
     #> 
     [cmdletbinding(
-        DefaultParameterSetName = 'Update'
+        DefaultParameterSetName = 'All'
     )]
         Param(
             [Parameter(Position=0,ValueFromPipeline = $True,ParameterSetName = 'Update')]
@@ -220,6 +220,9 @@ function Get-PSWSUSUpdate {
             }
             'UpdateScope' {
                 $Wsus.getupdates($UpdateScope)
+            }
+            'All'{
+                $Wsus.getupdates()
             }
         }
     }

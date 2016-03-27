@@ -23,6 +23,7 @@ function Disconnect-PSWSUSServer {
     Param ()
     Process { 
         #Disconnect WSUS session by removing the variable   
-        Remove-Variable -Name wsus -Force -Scope Global
+        Remove-Variable -Name wsus -Force -Scope Script
+        Remove-Variable -Name _wsusconfig -Force -Scope Script
     }
 }

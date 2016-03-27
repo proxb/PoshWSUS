@@ -16,6 +16,8 @@ function Get-PSWSUSConfigEnabledUpdateLanguages {
 		Name: Get-PSWSUSConfigEnabledUpdateLanguages
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified: 06 Feb 2014 -- Boe Prox
+            -Removed instances where set actions are occuring
 
 	.LINK
 		http://blog.itstuff.in.ua/?p=62#Get-PSWSUSConfigEnabledUpdateLanguages
@@ -29,13 +31,7 @@ function Get-PSWSUSConfigEnabledUpdateLanguages {
 
     Begin
     {
-        if($wsus)
-        {
-            $config = $wsus.GetConfiguration()
-            $config.ServerId = [System.Guid]::NewGuid()
-            $config.Save()
-        }#endif
-        else
+        if( -NOT $wsus)
         {
             Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
             Break
@@ -44,7 +40,7 @@ function Get-PSWSUSConfigEnabledUpdateLanguages {
     Process
     {
         Write-Verbose "Getting WSUS Enabled Update Languages."
-        $config.GetEnabledUpdateLanguages()
+        $_wsusconfig.GetEnabledUpdateLanguages()
     }
     End{}
 }

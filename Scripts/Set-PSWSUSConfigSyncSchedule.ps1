@@ -49,6 +49,10 @@ function Set-PSWSUSConfigSyncSchedule {
 		Name: Set-PSWSUSConfigSyncSchedule
         Author: Dubinsky Evgeny
         DateCreated: 1DEC2013
+        Modified 05 Feb 2014 -- boe Prox
+            -Changed [bool] param types to [switch] to align with best practices
+            -Add -WhatIf support
+            -Removed Begin, Process, End as no pipeline support defined
 
 	.LINK
 		http://blog.itstuff.in.ua/?p=62#Set-PSWSUSConfigSyncSchedule
@@ -59,29 +63,22 @@ function Set-PSWSUSConfigSyncSchedule {
     Param
     (
         [Parameter(Position = 0,Mandatory=$true)]
-        [Boolean]$SynchronizeAutomatically,
+        [switch]$SynchronizeAutomatically,
         [System.TimeSpan]$SynchronizeAutomaticallyTimeOfDay,
         [ValidateRange(1, 24)][int]
         $NumberOfSynchronizationsPerDay
     )
 
-    Begin
+    if($wsus)
     {
-        if($wsus)
-        {
-            $subscription = $wsus.GetSubscription()
-        }#endif
-        else
-        {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
-            Break
-        }
+        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Break
     }
-    Process
-    {        
+    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Sync Schedule')) {
+        $subscription = $wsus.GetSubscription()       
         if ($SynchronizeAutomatically)
         {
-            $subscription.SynchronizeAutomatically = $SynchronizeAutomatically
+            $subscription.SynchronizeAutomatically = $True
             
             if ($PSBoundParameters['SynchronizeAutomaticallyTimeOfDay'])
             {
@@ -106,9 +103,6 @@ function Set-PSWSUSConfigSyncSchedule {
         {
             $subscription.SynchronizeAutomatically = $false
         }#endElse
-    }#endProcess
-    End
-    {
         $subscription.Save()
     }
 }
