@@ -1,4 +1,4 @@
-PoshWSUS 2.3.1.1 Release Notes
+PoshWSUS 2.3.1.2 Release Notes
 Last Updated: 
 
 
@@ -21,7 +21,6 @@ Get-PSWSUSConfigSupportedUpdateLanguages
 Get-PSWSUSConfigUpdateFiles
 Get-PSWSUSConfigUpdateSource
 Set-PSWSUSConfigEnabledUpdateLanguages
-Set-PSWSUSConfigProxyServer
 Set-PSWSUSConfigTargetingMode
 Set-PSWSUSConfigUpdateFiles
 Set-PSWSUSConfigUpdateSource
