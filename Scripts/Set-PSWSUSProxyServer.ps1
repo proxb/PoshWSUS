@@ -19,11 +19,8 @@ function Set-PSWSUSProxyServer {
 .PARAMETER ProxyUserName
     The user name to use when accessing the proxy server. The name must be less than 256 characters. 
 
-.PARAMETER ProxyUserDomain
-    The name of the domain that contains the user's logon account. The name must be less than 256 characters.
-	
-.PARAMETER ProxyPassword
-    Password to use when accessing the proxy.
+.PARAMETER ProxyCredential
+    The user name and password to use when accessing the proxy server. The name must be less than 256 characters. 
         
 .PARAMETER UseSeparateProxyForSsl
         Sets whether a separate proxy should be used for SSL communications with the upstream server.
@@ -83,9 +80,7 @@ function Set-PSWSUSProxyServer {
         [Boolean]$UseProxy,
         [ValidateLength(1, 255)][alias("SslProxyName")][string]$ProxyName,
         [ValidateRange(0,65536)][alias("SslProxyServerPort")][int]$ProxyServerPort,
-        [ValidateLength(1, 255)][string]$ProxyUserName,
-        [ValidateLength(1, 255)][string]$ProxyUserDomain,
-        $ProxyPassword,
+        [PSCredential]$ProxyCredential,
         # Gets or sets whether a separate proxy should be used for SSL communications with the upstream server. 
         [Boolean]$UseSeparateProxyForSsl,
         [Boolean]$AnonymousProxyAccess,
@@ -127,14 +122,10 @@ function Set-PSWSUSProxyServer {
             $config.ProxyServerPort = $ProxyServerPort
         }#endif
                 
-        if ($PSBoundParameters['ProxyUserName'] -ne $null)
+        if ($PSBoundParameters['ProxyCredential'] -ne $null)
         {
-            $config.ProxyUserName = $ProxyUserName
+            $config.ProxyUserName = $ProxyCredential.GetNetworkCredential().UserName
         }#endif
-        else
-        {
-            $config.ProxyUserName = $null
-        }
 
         if ($PSBoundParameters['ProxyUserDomain'] -ne $null)
         {
@@ -143,21 +134,6 @@ function Set-PSWSUSProxyServer {
         else
         {
             $config.ProxyUserDomain = $null
-        }
-
-        if ($PSBoundParameters['ProxyPassword'])
-        {
-            # TO DO. Why Password dosen't set?
-            # Need secure connection with wsus
-            #$ProxyPassword = Read-Host -Prompt 'Enter Password' -AsSecureString
-            #$wsus.GetConfiguration().SetProxyPassword($ProxyPassword)
-            
-            Write-Warning "SORRY! You need to specify password manually in console `n This issue we will fix in next release"
-        }#endif
-        elseif($PSBoundParameters['ProxyPassword'] -eq $null)
-        {
-            # if not SSL connection, ProxyPassword is read only
-            #$config.ProxyPassword  = $null
         }
 
         if ($PSBoundParameters['AnonymousProxyAccess'] -ne $null)
