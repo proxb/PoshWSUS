@@ -30,7 +30,7 @@ Function Connect-PSWSUSServer {
         https://learn-powershell.net
 
     .EXAMPLE
-    Connect-PSWSUSServer -PSWSUSserver "server1"
+    Connect-PSWSUSServer -WSUSserver "server1"
 
     Description
     -----------
