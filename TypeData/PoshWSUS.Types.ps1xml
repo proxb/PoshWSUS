@@ -108,12 +108,14 @@
 		<ScriptProperty>
 			<Name>UpdateTitle</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand Title
 			</GetScriptBlock>
 		</ScriptProperty>
 		<ScriptProperty>
 			<Name>UpdateKB</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand KnowledgebaseArticles
 			</GetScriptBlock>
 		</ScriptProperty>
@@ -149,6 +151,7 @@
 			<ScriptProperty>
 				<Name>UpdateServerName</Name>
 				<GetScriptBlock>
+					$wsus = Get-PSWSUSServer
 					$wsus.Name
 				</GetScriptBlock>
 			</ScriptProperty>
@@ -178,6 +181,7 @@
 			<ScriptProperty>
 				<Name>UpdateServerName</Name>
 				<GetScriptBlock>
+					$wsus = Get-PSWSUSServer
 					$wsus.Name
 				</GetScriptBlock>
 			</ScriptProperty>
@@ -253,18 +257,21 @@
       <ScriptProperty>
         <Name>ComputerGroup</Name>
         <GetScriptBlock>
+          $wsus = Get-PSWSUSServer
           $Wsus.GetComputerTargetGroup([guid]$This.ComputerTargetGroupId).Name
         </GetScriptBlock>
       </ScriptProperty>
 		<ScriptProperty>
 			<Name>UpdateTitle</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand Title
 			</GetScriptBlock>
 		</ScriptProperty>
 		<ScriptProperty>
 			<Name>UpdateKB</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand KnowledgebaseArticles
 			</GetScriptBlock>
 		</ScriptProperty>
@@ -346,6 +353,7 @@
 		<ScriptProperty>
 			<Name>Computer</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetComputerTarget($This.ComputerTargetID) | Select -Expand FullDomainName
 			</GetScriptBlock>
 		</ScriptProperty>
@@ -363,12 +371,14 @@
 		<ScriptProperty>
 			<Name>UpdateTitle</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand Title
 			</GetScriptBlock>
 		</ScriptProperty>
 		<ScriptProperty>
 			<Name>UpdateKB</Name>
 			<GetScriptBlock>
+				$wsus = Get-PSWSUSServer
 				$wsus.GetUpdate([guid]$This.UpdateId) | Select -Expand KnowledgebaseArticles
 			</GetScriptBlock>
 		</ScriptProperty>	
