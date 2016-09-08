@@ -1,4 +1,4 @@
-PoshWSUS 2.3.1.2 Release Notes
+PoshWSUS 2.3.1.4 Release Notes
 Last Updated: 28 March 2016
 
 !!!IMPORTANT!!!
