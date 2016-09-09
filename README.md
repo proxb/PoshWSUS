@@ -1,5 +1,5 @@
-PoshWSUS 2.3.1.4 Release Notes
-Last Updated: 28 March 2016
+PoshWSUS 2.3.1.5 Release Notes
+Last Updated: 9 Sept 2016
 
 !!!IMPORTANT!!!
 Functions have been renamed from *-PoshWSUS* to *-PSWSUS* based on user feedback. 
