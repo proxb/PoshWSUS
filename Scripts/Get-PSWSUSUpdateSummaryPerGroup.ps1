@@ -77,8 +77,10 @@ function Get-PSWSUSUpdateSummaryPerGroup {
     Process {
         If ($PSBoundParameters['UpdateName']) {
             $hash['UpdateObject'] = Get-PSWSUSUpdate -Update $UpdateName
-        } Else {
+        } ElseIf ($PSBoundParameters['UpdateObject']) {
             $hash['UpdateObject'] = $UpdateObject
+        } Else {
+            $hash['UpdateObject'] = Get-PSWSUSUpdate
         }
         If ($PSBoundParameters['GroupName']) {
             Write-Verbose "Gathering data from specified group"
