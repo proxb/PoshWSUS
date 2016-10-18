@@ -220,8 +220,14 @@ function Get-PSWSUSUpdateApproval {
         }
         Write-Verbose "Begin locating approvals"
         ForEach ($patch in $patches) {
-            $patch.GetUpdateApprovals()
-        }        
+            If ($PSBoundParameters['ComputerTargetGroups']) {
+                ForEach ($ComputerTargetGroup in $UpdateScope.ApprovedComputerTargetGroups) {
+                    $patch.GetUpdateApprovals($ComputerTargetGroup)
+                }
+            } Else {
+                $patch.GetUpdateApprovals()
+            }
+        }       
     }  
     End {
         $ErrorActionPreference = 'continue'    
