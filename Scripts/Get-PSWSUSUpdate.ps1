@@ -35,7 +35,7 @@ function Get-PSWSUSUpdate {
     .PARAMETER IncludedInstallationState
         Installation states to search for
      
-    .PARAMETER ExcludedInstallState
+    .PARAMETER ExcludedInstallationState
         Installation states to exclude
 
     .PARAMETER FromArrivalDate
@@ -128,7 +128,7 @@ function Get-PSWSUSUpdate {
             [Parameter(ParameterSetName='UpdateScope')]
             [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$IncludedInstallationState,
             [Parameter(ParameterSetName='UpdateScope')]
-            [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallState,
+            [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallationState,
             [Parameter(ParameterSetName='UpdateScope')]
             [DateTime]$FromArrivalDate,
             [Parameter(ParameterSetName='UpdateScope')]
@@ -156,8 +156,8 @@ function Get-PSWSUSUpdate {
             If ($PSBoundParameters['IncludedInstallationState']) {
                 $UpdateScope.IncludedInstallationStates = $IncludedInstallationState
             }
-            If ($PSBoundParameters['ExcludedInstallState']) {
-                $UpdateScope.ExcludedInstallStates = $ExcludedInstallState
+            If ($PSBoundParameters['ExcludedInstallationState']) {
+                $UpdateScope.ExcludedInstallationStates = $ExcludedInstallationState
             }
             If ($PSBoundParameters['UpdateApprovalAction']) {
                 $UpdateScope.UpdateApprovalActions = $UpdateApprovalAction
