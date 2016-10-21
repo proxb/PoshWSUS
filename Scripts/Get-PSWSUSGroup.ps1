@@ -47,6 +47,14 @@ function Get-PSWSUSGroup {
             [Parameter(ParameterSetName = 'Id')]
             [string]$Id            
             )
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {            
         Switch ($PSCmdlet.ParameterSetName) {
             'Name' {

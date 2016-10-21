@@ -27,9 +27,18 @@ function Start-PSWSUSSync {
         SupportsShouldProcess = $True
     )] 
     Param ()
+    
     Begin {
-        $sub = $wsus.GetSubscription()    
-        $sync = $sub.GetSynchronizationProgress()  
+        if($wsus)
+        {
+            $sub = $wsus.GetSubscription()    
+            $sync = $sub.GetSynchronizationProgress()
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }  
     }
     Process {  
         #Start WSUS synchronization

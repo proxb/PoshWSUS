@@ -21,6 +21,15 @@ function Get-PSWSUSSyncHistory {
     #> 
     [cmdletbinding()]  
     Param () 
-    $Subscription = $wsus.GetSubscription()
-    $Subscription.GetSynchronizationHistory()     
+    
+    if($wsus)
+    {
+        $Subscription = $wsus.GetSubscription()
+        $Subscription.GetSynchronizationHistory()
+    }#endif
+    else
+    {
+        Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+        Break
+    }
 } 

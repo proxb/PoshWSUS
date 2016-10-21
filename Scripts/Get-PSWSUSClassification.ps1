@@ -23,6 +23,14 @@ Function Get-PSWSUSClassification {
     #> 
     [cmdletbinding()]  
     Param()
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         $wsus.GetUpdateClassifications()        
     }

@@ -123,22 +123,30 @@ function Get-PSWSUSUpdateFile {
                 }   
             }                
             "name" {
-                Write-Verbose "Using 'Update Name' set name"
-                #Search for updates
-                Write-Verbose "Searching for update/s"
-                $patches = @($wsus.SearchUpdates($UpdateName))
-                If ($patches -eq 0) {
-                    Write-Error "Update $update could not be found in WSUS!"
+                if($wsus)
+                {
+                    Write-Verbose "Using 'Update Name' set name"
+                    #Search for updates
+                    Write-Verbose "Searching for update/s"
+                    $patches = @($wsus.SearchUpdates($UpdateName))
+                    If ($patches -eq 0) {
+                        Write-Error "Update $update could not be found in WSUS!"
+                        Break
+                    } Else {
+                        $Items = $patches | ForEach {
+                            $Patch = $_
+                            Write-Verbose ("Adding NoteProperty for {0}" -f $_.Title)                    
+                            $_.GetInstallableItems() | ForEach {
+                                $itemdata = $_ | Add-Member -MemberType NoteProperty -Name KnowledgeBaseArticles -value $patch.KnowledgeBaseArticles -PassThru
+                                $itemdata | Add-Member -MemberType NoteProperty -Name Title -value $patch.Title -PassThru
+                            }
+                        }                
+                    }
+                }#endif
+                else
+                {
+                    Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
                     Break
-                } Else {
-                    $Items = $patches | ForEach {
-                        $Patch = $_
-                        Write-Verbose ("Adding NoteProperty for {0}" -f $_.Title)                    
-                        $_.GetInstallableItems() | ForEach {
-                            $itemdata = $_ | Add-Member -MemberType NoteProperty -Name KnowledgeBaseArticles -value $patch.KnowledgeBaseArticles -PassThru
-                            $itemdata | Add-Member -MemberType NoteProperty -Name Title -value $patch.Title -PassThru
-                        }
-                    }                
                 }                     
             }
             Default {

@@ -117,9 +117,17 @@ function Set-PSWSUSEmailConfig {
             [string]$UpdateServer                                                                                                                                                           
     )
     Begin {   
-        #Configure Email Notifications
-        $email = $wsus.GetEmailNotificationConfiguration()
-        $ErrorActionPreference = 'stop'
+        if($wsus)
+        {
+            #Configure Email Notifications
+            $email = $wsus.GetEmailNotificationConfiguration()
+            $ErrorActionPreference = 'stop'
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
     }
     Process {
         Try {

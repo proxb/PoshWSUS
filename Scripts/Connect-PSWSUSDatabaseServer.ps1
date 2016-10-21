@@ -26,6 +26,14 @@ Function Connect-PSWSUSDatabaseServer {
                 ValueFromPipeline = $False)]
                 [switch]$Passthru
             )
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process { 
         #Create database connection
         Write-Verbose "Creating the database connection to the database hosting WSUS"

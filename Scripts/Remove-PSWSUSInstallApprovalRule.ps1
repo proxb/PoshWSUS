@@ -48,6 +48,15 @@ Function Remove-PSWSUSInstallApprovalRule {
                 ValueFromPipeline = $True)]
                 [system.object]$InputObject                                                                                                                                
                 )
+    
+    Begin
+    {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         Switch ($pscmdlet.parametersetname) {
             Name {

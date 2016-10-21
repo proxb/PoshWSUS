@@ -52,8 +52,16 @@ function Get-PSWSUSUpdateSummaryPerClient {
         [Microsoft.UpdateServices.Administration.UpdateScope]$UpdateScope                                                                                          
     )
     Begin {                
-        $ErrorActionPreference = 'stop'
-        $hash = @{}
+        if($wsus)
+        {
+            $ErrorActionPreference = 'stop'
+            $hash = @{}
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
     }
     Process {
         If ($PSBoundParameters['UpdateScope']) {

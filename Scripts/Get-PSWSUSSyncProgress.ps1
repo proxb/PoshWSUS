@@ -25,7 +25,15 @@ function Get-PSWSUSSyncProgress {
     [cmdletbinding()]  
     Param ()
     Begin {    
-        $sub = $wsus.GetSubscription()    
+        if($wsus)
+        {
+            $sub = $wsus.GetSubscription() 
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }   
     }
     Process {
         #Gather all child servers in WSUS    

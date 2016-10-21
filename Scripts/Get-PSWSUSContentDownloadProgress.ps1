@@ -24,6 +24,14 @@ function Get-PSWSUSContentDownloadProgress {
     #> 
     [cmdletbinding()]  
     Param ()
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         #Gather all child servers in WSUS    
         $wsus.GetContentDownloadProgress()       

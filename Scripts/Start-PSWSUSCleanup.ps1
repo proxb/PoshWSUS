@@ -76,30 +76,39 @@ function Start-PSWSUSCleanup {
                 Position = 5)]
                 [switch]$CleanupUnneededContentFiles                                                                                                     
                 ) 
+    
     Begin {            
-        #Create cleanup scope
-        $cleanScope = new-object Microsoft.UpdateServices.Administration.CleanupScope
-        #Create cleanup manager object
-        $cleanup = $wsus.GetCleanupManager()
+        if($wsus)
+        {
+            #Create cleanup scope
+            $cleanScope = new-object Microsoft.UpdateServices.Administration.CleanupScope
+            #Create cleanup manager object
+            $cleanup = $wsus.GetCleanupManager()
 
-        #Determine what will be in the scope
-        If ($PSBoundParameters['DeclineSupersededUpdates']) {
-            $cleanScope.DeclineSupersededUpdates = $True
-        }
-        If ($PSBoundParameters['DeclineExpiredUpdates']) {
-            $cleanScope.DeclineExpiredUpdates = $True
-        }
-        If ($PSBoundParameters['CleanupObsoleteUpdates']) {
-            $cleanScope.CleanupObsoleteUpdates = $True
-        }        
-        If ($PSBoundParameters['CompressUpdates']) {
-            $cleanScope.CompressUpdates = $True
-        }
-        If ($PSBoundParameters['CleanupObsoleteComputers']) {
-            $cleanScope.CleanupObsoleteComputers = $True
-        }
-        If ($PSBoundParameters['CleanupUnneededContentFiles']) {
-            $cleanScope.CleanupUnneededContentFiles = $True
+            #Determine what will be in the scope
+            If ($PSBoundParameters['DeclineSupersededUpdates']) {
+                $cleanScope.DeclineSupersededUpdates = $True
+            }
+            If ($PSBoundParameters['DeclineExpiredUpdates']) {
+                $cleanScope.DeclineExpiredUpdates = $True
+            }
+            If ($PSBoundParameters['CleanupObsoleteUpdates']) {
+                $cleanScope.CleanupObsoleteUpdates = $True
+            }        
+            If ($PSBoundParameters['CompressUpdates']) {
+                $cleanScope.CompressUpdates = $True
+            }
+            If ($PSBoundParameters['CleanupObsoleteComputers']) {
+                $cleanScope.CleanupObsoleteComputers = $True
+            }
+            If ($PSBoundParameters['CleanupUnneededContentFiles']) {
+                $cleanScope.CleanupUnneededContentFiles = $True
+            }
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
         }
     }
     Process {

@@ -147,67 +147,75 @@ function Get-PSWSUSUpdate {
             [Microsoft.UpdateServices.Internal.BaseApi.UpdateClassification[]]$Classification
         )
     Begin {                
-        $ErrorActionPreference = 'stop'  
-        If ($PSCmdlet.ParameterSetName -eq 'UpdateScope') {
-            $UpdateScope = New-Object Microsoft.UpdateServices.Administration.UpdateScope  
-            If ($PSBoundParameters['ApprovedState']) {
-                $UpdateScope.ApprovedStates = $ApprovedState
-            }
-            If ($PSBoundParameters['IncludedInstallationState']) {
-                $UpdateScope.IncludedInstallationStates = $IncludedInstallationState
-            }
-            If ($PSBoundParameters['ExcludedInstallationState']) {
-                $UpdateScope.ExcludedInstallationStates = $ExcludedInstallationState
-            }
-            If ($PSBoundParameters['UpdateApprovalAction']) {
-                $UpdateScope.UpdateApprovalActions = $UpdateApprovalAction
-            }
-            If ($PSBoundParameters['UpdateSource']) {
-                $UpdateScope.UpdateSources = $UpdateSource
-            }
-            If ($PSBoundParameters['UpdateType']) {
-                $UpdateScope.UpdateTypes = $UpdateType
-            }
-            If ($PSBoundParameters['FromArrivalDate']) {
-                $UpdateScope.FromArrivalDate = $FromArrivalDate
-            }
-            If ($PSBoundParameters['ToArrivalDate']) {
-                $UpdateScope.ToArrivalDate = $ToArrivalDate
-            }
-            If ($PSBoundParameters['FromCreationDate']) {
-                $UpdateScope.FromCreationDate = $FromCreationDate
-            }
-            If ($PSBoundParameters['ToCreationDate']) {
-                $UpdateScope.ToCreationDate = $ToCreationDate
-            }
-            If ($PSBoundParameters['ExcludeOptionalUpdates']) {
-                $UpdateScope.ExcludeOptionalUpdates = $ExcludeOptionalUpdates
-            }
-            If ($PSBoundParameters['IsWsusInfrastructureUpdate']) {
-                $UpdateScope.IsWsusInfrastructureUpdate = $IsWsusInfrastructureUpdate
-            }
-            If ($PSBoundParameters['Category']) {
-                [void]$UpdateScope.Categories.AddRange($Category)
-            }
-            If ($PSBoundParameters['Classification']) {
-                [void]$UpdateScope.Classifications.AddRange($Classification)
-            }
-            If ($PSBoundParameters['IncludeText']) {
-                $UpdateScope.TextIncludes = $IncludeText
-            }
-            If ($PSBoundParameters['ExcludeText']) {
-                $UpdateScope.TextNotIncludes = $ExcludeText
-            }
-            If ($PSBoundParameters['ComputerTargetGroups']) {
-                $Groups = @{}
-                $Wsus.GetComputerTargetGroups() | ForEach {                    
-                    $Groups[$_.Name]=$_
+        if($wsus)
+        {
+            $ErrorActionPreference = 'stop'  
+            If ($PSCmdlet.ParameterSetName -eq 'UpdateScope') {
+                $UpdateScope = New-Object Microsoft.UpdateServices.Administration.UpdateScope  
+                If ($PSBoundParameters['ApprovedState']) {
+                    $UpdateScope.ApprovedStates = $ApprovedState
                 }
-                ForEach ($Group in $ComputerTargetGroups) {
-                    Write-Verbose "Adding Target Group: $($Group)"
-                    [void]$UpdateScope.ApprovedComputerTargetGroups.Add($Groups[$Group])
+                If ($PSBoundParameters['IncludedInstallationState']) {
+                    $UpdateScope.IncludedInstallationStates = $IncludedInstallationState
+                }
+                If ($PSBoundParameters['ExcludedInstallationState']) {
+                    $UpdateScope.ExcludedInstallationStates = $ExcludedInstallationState
+                }
+                If ($PSBoundParameters['UpdateApprovalAction']) {
+                    $UpdateScope.UpdateApprovalActions = $UpdateApprovalAction
+                }
+                If ($PSBoundParameters['UpdateSource']) {
+                    $UpdateScope.UpdateSources = $UpdateSource
+                }
+                If ($PSBoundParameters['UpdateType']) {
+                    $UpdateScope.UpdateTypes = $UpdateType
+                }
+                If ($PSBoundParameters['FromArrivalDate']) {
+                    $UpdateScope.FromArrivalDate = $FromArrivalDate
+                }
+                If ($PSBoundParameters['ToArrivalDate']) {
+                    $UpdateScope.ToArrivalDate = $ToArrivalDate
+                }
+                If ($PSBoundParameters['FromCreationDate']) {
+                    $UpdateScope.FromCreationDate = $FromCreationDate
+                }
+                If ($PSBoundParameters['ToCreationDate']) {
+                    $UpdateScope.ToCreationDate = $ToCreationDate
+                }
+                If ($PSBoundParameters['ExcludeOptionalUpdates']) {
+                    $UpdateScope.ExcludeOptionalUpdates = $ExcludeOptionalUpdates
+                }
+                If ($PSBoundParameters['IsWsusInfrastructureUpdate']) {
+                    $UpdateScope.IsWsusInfrastructureUpdate = $IsWsusInfrastructureUpdate
+                }
+                If ($PSBoundParameters['Category']) {
+                    [void]$UpdateScope.Categories.AddRange($Category)
+                }
+                If ($PSBoundParameters['Classification']) {
+                    [void]$UpdateScope.Classifications.AddRange($Classification)
+                }
+                If ($PSBoundParameters['IncludeText']) {
+                    $UpdateScope.TextIncludes = $IncludeText
+                }
+                If ($PSBoundParameters['ExcludeText']) {
+                    $UpdateScope.TextNotIncludes = $ExcludeText
+                }
+                If ($PSBoundParameters['ComputerTargetGroups']) {
+                    $Groups = @{}
+                    $Wsus.GetComputerTargetGroups() | ForEach {                    
+                        $Groups[$_.Name]=$_
+                    }
+                    ForEach ($Group in $ComputerTargetGroups) {
+                        Write-Verbose "Adding Target Group: $($Group)"
+                        [void]$UpdateScope.ApprovedComputerTargetGroups.Add($Groups[$Group])
+                    }
                 }
             }
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
         }
     }
     Process {

@@ -108,12 +108,20 @@ function Get-PSWSUSInstallableItem {
                 $patches = $inputobject    
             }                
             "name" {
-                Write-Verbose "Using 'String' set name"
-                #Search for updates
-                Write-Verbose "Searching for update/s"
-                $patches = @($wsus.SearchUpdates($UpdateName))
-                If ($patches -eq 0) {
-                    Write-Error "Update $update could not be found in WSUS!"
+                if($wsus)
+                {
+                    Write-Verbose "Using 'String' set name"
+                    #Search for updates
+                    Write-Verbose "Searching for update/s"
+                    $patches = @($wsus.SearchUpdates($UpdateName))
+                    If ($patches -eq 0) {
+                        Write-Error "Update $update could not be found in WSUS!"
+                        Break
+                    }
+                }#endif
+                else
+                {
+                    Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
                     Break
                 }                     
             }

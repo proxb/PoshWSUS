@@ -21,6 +21,13 @@ function Get-PSWSUSEvent {
     #> 
     [cmdletbinding()]  
     Param () 
+    
+    if(-not $wsus)
+    {
+        Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+        Break
+    }
+
     $Subscription = $wsus.GetSubscription()
     $Subscription.GetEventHistory() | ForEach {
         $_ | Add-Member -MemberType NoteProperty -Name EventID -Value ($_.Row.EventID) -PassThru |

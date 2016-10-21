@@ -39,6 +39,14 @@ function Get-PSWSUSCategory {
             ValueFromPipeline = $True)]
             [string]$Title            
     ) 
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         If ($PSBoundParameters['Id']) {
             $Wsus.GetUpdateCategory($Id)

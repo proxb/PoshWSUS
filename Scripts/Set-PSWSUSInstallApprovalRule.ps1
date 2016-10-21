@@ -109,8 +109,16 @@ Function Set-PSWSUSInstallApprovalRule {
         [Switch]$Disable,
         [Parameter(Position=7)]
         [Switch]$PassThru
-                                                                                                                                         
     )
+
+    Begin
+    {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         If ($pscmdlet.parametersetname -eq "Name") {
             #Locate rule by name

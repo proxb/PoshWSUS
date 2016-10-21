@@ -21,6 +21,15 @@ function Reset-PSWSUSContent {
     #> 
     [cmdletbinding()]  
     Param () 
+    
+    Begin
+    {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         #Reset the WSUS content and verify files   
         $wsus.ResetAndVerifyContentState()
