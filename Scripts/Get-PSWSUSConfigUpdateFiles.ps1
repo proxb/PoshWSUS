@@ -35,7 +35,7 @@ function Get-PSWSUSConfigUpdateFiles {
         }#endif
         else
         {
-            Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
             Break
         }
     }

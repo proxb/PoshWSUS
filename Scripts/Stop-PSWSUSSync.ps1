@@ -25,8 +25,17 @@ function Stop-PSWSUSSync {
         SupportsShouldProcess = $True
     )]
         Param()
+    
     Begin {
-        $sub = $wsus.GetSubscription()      
+        if($wsus)
+        {
+            $sub = $wsus.GetSubscription()
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }   
     }
     Process {
         #Cancel synchronization running on WSUS       

@@ -103,39 +103,47 @@ function Get-PSWSUSClient {
             [switch]$IncludeDownstreamComputerTargets
         )
     Begin {                
-        $ErrorActionPreference = 'Stop'  
-        If ($PSCmdlet.ParameterSetName -eq 'ComputerScope') {
-            $ComputerScope = New-Object Microsoft.UpdateServices.Administration.ComputerTargetScope  
-            If ($PSBoundParameters['IncludedInstallationState']) {
-                $ComputerScope.IncludedInstallationStates = $IncludedInstallationState
+        if($wsus)
+        {
+            $ErrorActionPreference = 'Stop'  
+            If ($PSCmdlet.ParameterSetName -eq 'ComputerScope') {
+                $ComputerScope = New-Object Microsoft.UpdateServices.Administration.ComputerTargetScope  
+                If ($PSBoundParameters['IncludedInstallationState']) {
+                    $ComputerScope.IncludedInstallationStates = $IncludedInstallationState
+                }
+                If ($PSBoundParameters['ExcludedInstallState']) {
+                    $ComputerScope.ExcludedInstallationStates = $ExcludedInstallState
+                }
+                If ($PSBoundParameters['FromLastStatusTime']) {
+                    $ComputerScope.FromLastReportedStatusTime = $FromLastStatusTime
+                }
+                If ($PSBoundParameters['ToLastStatusTime']) {
+                    $ComputerScope.ToLastReportedStatusTime = $ToLastStatusTime
+                }
+                If ($PSBoundParameters['FromLastSyncTime']) {
+                    $ComputerScope.FromLastSyncTime = $FromLastSyncTime
+                }
+                If ($PSBoundParameters['ToLastSyncTime']) {
+                    $ComputerScope.ToLastSyncTime = $ToLastSyncTime
+                }
+                If ($PSBoundParameters['IncludeSubGroups']) {
+                    $ComputerScope.IncludeSubgroups = $IncludeSubGroups
+                }
+                If ($PSBoundParameters['OSFamily']) {
+                    $ComputerScope.OSFamily = $OSFamily
+                }
+                If ($PSBoundParameters['IncludeDownstreamComputerTargets']) {
+                    $ComputerScope.IncludeDownstreamComputerTargets = $IncludeDownstreamComputerTargets
+                }
+                If ($PSBoundParameters['ComputerTargetGroups']) {
+                    [void]$ComputerScope.ComputerTargetGroups.AddRange($ComputerTargetGroups)
+                }
             }
-            If ($PSBoundParameters['ExcludedInstallState']) {
-                $ComputerScope.ExcludedInstallationStates = $ExcludedInstallState
-            }
-            If ($PSBoundParameters['FromLastStatusTime']) {
-                $ComputerScope.FromLastReportedStatusTime = $FromLastStatusTime
-            }
-            If ($PSBoundParameters['ToLastStatusTime']) {
-                $ComputerScope.ToLastReportedStatusTime = $ToLastStatusTime
-            }
-            If ($PSBoundParameters['FromLastSyncTime']) {
-                $ComputerScope.FromLastSyncTime = $FromLastSyncTime
-            }
-            If ($PSBoundParameters['ToLastSyncTime']) {
-                $ComputerScope.ToLastSyncTime = $ToLastSyncTime
-            }
-            If ($PSBoundParameters['IncludeSubGroups']) {
-                $ComputerScope.IncludeSubgroups = $IncludeSubGroups
-            }
-            If ($PSBoundParameters['OSFamily']) {
-                $ComputerScope.OSFamily = $OSFamily
-            }
-            If ($PSBoundParameters['IncludeDownstreamComputerTargets']) {
-                $ComputerScope.IncludeDownstreamComputerTargets = $IncludeDownstreamComputerTargets
-            }
-            If ($PSBoundParameters['ComputerTargetGroups']) {
-                [void]$ComputerScope.ComputerTargetGroups.AddRange($ComputerTargetGroups)
-            }
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
         }
     }
     Process {

@@ -40,7 +40,15 @@ function Get-PSWSUSEmailConfig {
                 [switch]$SendTestEmail                   
                 )     
     Begin {              
-        $email = $wsus.GetEmailNotificationConfiguration()    
+        if($wsus)
+        {
+            $email = $wsus.GetEmailNotificationConfiguration()
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
     }
     Process {
         If ($PSBoundParameters['SendTestEmail']) {

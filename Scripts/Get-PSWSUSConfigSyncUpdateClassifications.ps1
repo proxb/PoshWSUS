@@ -28,9 +28,9 @@ function Get-PSWSUSConfigSyncUpdateClassifications {
     Param()
 
 
-    if ($wsus)
+    if (-not $wsus)
     {
-        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
         Break
     }
     $wsus.GetSubscription().GetUpdateClassifications()

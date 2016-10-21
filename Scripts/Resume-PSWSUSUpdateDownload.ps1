@@ -35,7 +35,15 @@ function Resume-PSWSUSUpdateDownload {
     [switch]$AllUpdates                                          
     ) 
     Begin {
-        $List = New-Object System.Collections.ArrayList
+        if($wsus)
+        {
+            $List = New-Object System.Collections.ArrayList
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
     }                
     Process {
         If ($pscmdlet.ParameterSetName -eq 'Update') {

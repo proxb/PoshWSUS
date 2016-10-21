@@ -38,6 +38,14 @@ function Import-PSWSUSMetaData {
             [Parameter(Mandatory=$True,Position = 1,ValueFromPipeline = $True)]
             [string]$LogName                                                            
         )
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         If ($pscmdlet.ShouldProcess($FileName,"Import MetaData")) {
             Try {

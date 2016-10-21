@@ -21,6 +21,15 @@ function Stop-PSWSUSDownload {
     #> 
     [cmdletbinding()]
     Param()
+    
+    Begin
+    {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process { 
         #Cancel all downloads running on WSUS       
         If ($pscmdlet.ShouldProcess($($wsus.name))) {

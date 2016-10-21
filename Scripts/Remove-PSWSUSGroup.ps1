@@ -56,6 +56,14 @@ function Remove-PSWSUSGroup {
             )]
             [Microsoft.UpdateServices.Internal.BaseApi.ComputerTargetGroup]$InputObject
         )            
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         #Determine action based on Parameter Set Name
         Switch ($pscmdlet.ParameterSetName) {            

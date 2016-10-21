@@ -22,7 +22,15 @@ function Get-PSWSUSSyncEvent {
     [cmdletbinding()]  
     Param () 
     Begin {
-        $sub = $wsus.GetSubscription()
+        if($wsus)
+        {
+            $sub = $wsus.GetSubscription()
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
     }
     Process {
         $sub.GetEventHistory()      

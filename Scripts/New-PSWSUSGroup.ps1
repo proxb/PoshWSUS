@@ -59,6 +59,14 @@ function New-PSWSUSGroup {
             Position = 2)]
             [switch]$PassThru                                                            
     ) 
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         Try {
             #Determine action based on Parameter Set Name

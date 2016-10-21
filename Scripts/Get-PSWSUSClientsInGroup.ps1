@@ -41,6 +41,14 @@ function Get-PSWSUSClientsInGroup {
             Position = 1)]
             [string]$Id                           
             )
+    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {                                    
         If ($PSBoundParameters['id']) {     
             ($wsus.GetComputerTargetGroups() | Where {

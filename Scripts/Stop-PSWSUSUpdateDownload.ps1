@@ -31,10 +31,19 @@ function Stop-PSWSUSUpdateDownload {
                 ValueFromPipeline = $True)]
                 [string]$update                                          
                 ) 
+
     Begin {
-        #Gather all updates from given information
-        Write-Verbose "Searching for updates"
-        $patches = $wsus.SearchUpdates($update)
+        if($wsus)
+        {
+            #Gather all updates from given information
+            Write-Verbose "Searching for updates"
+            $patches = $wsus.SearchUpdates($update)
+        }#endif
+        else
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
     }            
     Process {
         If ($patches) {

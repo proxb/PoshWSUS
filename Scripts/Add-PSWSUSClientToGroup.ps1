@@ -50,21 +50,29 @@ function Add-PSWSUSClientToGroup {
             $Client = $Computername
         }
         If ($client) {
-            #Get group object
-            Write-Verbose "Retrieving group"
-            $targetgroup = $wsus.getcomputertargetgroups() | Where {
-                $_.Name -eq $group
-            }
-            If (-Not $targetgroup) {
-                Write-Error "Group $group does not exist in WSUS!"
-                Break
-            }
-            ForEach ($C in $Client) {    
-                #Add client to group
-                Write-Verbose ("Adding {0} to {1}" -f $c.fulldomainname,$Group)
-                If ($pscmdlet.ShouldProcess($($c.fulldomainname))) {
-                    $targetgroup.AddComputerTarget($c)
+            if($wsus)
+            {
+                #Get group object
+                Write-Verbose "Retrieving group"
+                $targetgroup = $wsus.getcomputertargetgroups() | Where {
+                    $_.Name -eq $group
                 }
+                If (-Not $targetgroup) {
+                    Write-Error "Group $group does not exist in WSUS!"
+                    Break
+                }
+                ForEach ($C in $Client) {    
+                    #Add client to group
+                    Write-Verbose ("Adding {0} to {1}" -f $c.fulldomainname,$Group)
+                    If ($pscmdlet.ShouldProcess($($c.fulldomainname))) {
+                        $targetgroup.AddComputerTarget($c)
+                    }
+                }
+            }#endif
+            else
+            {
+                Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+                Break
             }
         } Else {
             Write-Warning ("{0}: Unable to locate!`n{1}" -f $Computername,$_.Exception.Message)

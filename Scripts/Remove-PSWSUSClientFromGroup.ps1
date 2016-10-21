@@ -46,6 +46,13 @@ function Remove-PSWSUSClientFromGroup {
                 ValueFromPipeline = $True)]
                 [string]$Computer                                             
                 )
+    
+    if(-not $wsus)
+    {
+        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+        Break
+    }
+    
     #Verify Computer is in WSUS
     $client = Get-PSWSUSClient -computername $computer
     If ($client) {
