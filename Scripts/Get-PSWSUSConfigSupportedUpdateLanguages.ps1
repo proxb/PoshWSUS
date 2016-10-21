@@ -41,7 +41,7 @@ function Get-PSWSUSConfigSupportedUpdateLanguages {
     )
     if(-not $wsus)
     {
-        Write-Warning "Use Connect-PSWSUSServer for establish connection with your Windows Update Server"
+        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
         Break
     } 
     Write-Verbose "Getting WSUS Supported Update Languages"

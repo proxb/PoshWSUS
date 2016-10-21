@@ -36,7 +36,7 @@ function Start-PSWSUSSync {
         }#endif
         else
         {
-            Write-Warning "Use Connect-PoshWSUSServer for establish connection with your Windows Update Server"
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
             Break
         }  
     }
