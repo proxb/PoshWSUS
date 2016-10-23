@@ -50,32 +50,30 @@ Function Start-PSWSUSInstallApprovalRule {
                 [system.object]$InputObject                                                                                                                                
                 )
     
-    Begin
-    {
-        if(-not $wsus)
-        {
-            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
-            Break
-        }
-    }
     Process {
         Switch ($pscmdlet.parametersetname) {
             Name {
-                #Locate rule by name
-                Write-Verbose "Locating Rule by name"
-                $rule = $wsus.GetInstallApprovalRules() | Where {
-                    $_.Name -eq $name
+                if ($wsus) {
+                    #Locate rule by name
+                    Write-Verbose "Locating Rule by name"
+                    $rule = $wsus.GetInstallApprovalRules() | Where {
+                        $_.Name -eq $name
+                    }
+                    If ($rule -eq $Null) {
+                        Write-Warning "No rules found by given name"
+                        Continue
+                    } Else {
+                        If ($pscmdlet.ShouldProcess("$($rule.name)")) {
+                            #Running approval rule
+                            Write-Verbose "Running approval rule"
+                            $rule.ApplyRule()
+                        }                
+                    }
                 }
-                If ($rule -eq $Null) {
-                    Write-Warning "No rules found by given name"
-                    Continue
-                } Else {
-                    If ($pscmdlet.ShouldProcess("$($rule.name)")) {
-                        #Running approval rule
-                        Write-Verbose "Running approval rule"
-                        $rule.ApplyRule()
-                    }                
-                }                
+                else {
+                    Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+                    Break
+                }               
             }
             Object {
                 #Rule is an object
