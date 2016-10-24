@@ -111,24 +111,22 @@ Function Set-PSWSUSInstallApprovalRule {
         [Switch]$PassThru
     )
 
-    Begin
-    {
-        if(-not $wsus)
-        {
-            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
-            Break
-        }
-    }
     Process {
         If ($pscmdlet.parametersetname -eq "Name") {
-            #Locate rule by name
-            Write-Verbose "Locating Rule by name"
-            $rule = $wsus.GetInstallApprovalRules() | Where {
-                $_.Name -eq $name
+            if ($wsus) {
+                #Locate rule by name
+                Write-Verbose "Locating Rule by name"
+                $rule = $wsus.GetInstallApprovalRules() | Where {
+                    $_.Name -eq $name
+                }
+                If ($rule -eq $Null) {
+                    Write-Warning "No rules found by given name"
+                    Continue
+                }
             }
-            If ($rule -eq $Null) {
-                Write-Warning "No rules found by given name"
-                Continue
+            else {
+                Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+                Break
             }
         } Else {
             #Rule is coming in as an object
