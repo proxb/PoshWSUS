@@ -59,7 +59,7 @@ function Remove-PSWSUSUpdate {
             #Storing update guid
             $guid = ($patch.id).updateid              
             If ($pscmdlet.ShouldProcess($($patch.title))) {
-                $wsus.DeleteUpdate($guid,$True)
+                $wsus.DeleteUpdate($guid)
                 "$($patch.title) has been deleted from WSUS"
             }         
         }
