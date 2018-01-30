@@ -29,7 +29,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) 2011 Boe Prox. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'PowerShell module to manage a WSUS Server. Support site: http://PoshWSUS.codeplex.com'
+Description = 'PowerShell module to manage a WSUS Server. Support site: https://github.com/proxb/PoshWSUS/'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '2.0'
@@ -86,7 +86,11 @@ ModuleList = @()
 FileList = @('TypeData\PoshWSUS.Types.ps1xml','TypeData\PoshWSUS.Format.ps1xml', 'PoshWSUS.psm1','PoshWSUS.psd1')
 
 # Private data to pass to the module specified in ModuleToProcess
-PrivateData = ''
-
+PrivateData = @{
+    PSData = {
+        LicenseUri = 'https://github.com/proxb/PoshWSUS/blob/master/LICENSE'
+        ProjectUri = 'https://github.com/proxb/PoshWSUS/'
+    }
+}
 }
 
