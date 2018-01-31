@@ -87,7 +87,7 @@ FileList = @('TypeData\PoshWSUS.Types.ps1xml','TypeData\PoshWSUS.Format.ps1xml',
 
 # Private data to pass to the module specified in ModuleToProcess
 PrivateData = @{
-    PSData = {
+    PSData = @{
         LicenseUri = 'https://github.com/proxb/PoshWSUS/blob/master/LICENSE'
         ProjectUri = 'https://github.com/proxb/PoshWSUS/'
     }
