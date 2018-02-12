@@ -91,11 +91,9 @@ function Set-PSWsusConfigProxyServer {
         [ValidateRange(0,65536)]
         [alias("SslProxyServerPort")]
         [int]$ProxyServerPort,
-        [ValidateLength(1, 255)]
-        [string]$ProxyUserName,
+        [System.Management.Automation.Credential()]$ProxyCredential = [System.Management.Automation.PSCredential]::Empty,
         [ValidateLength(1, 255)]
         [string]$ProxyUserDomain,
-        $ProxyPassword,
         # Gets or sets whether a separate proxy should be used for SSL communications with the upstream server. 
         [switch]$UseSeparateProxyForSsl,
         [switch]$AnonymousProxyAccess,
@@ -127,9 +125,9 @@ function Set-PSWsusConfigProxyServer {
                 $_wsusconfig.ProxyServerPort = $ProxyServerPort
             }#endif
                 
-            if ($PSBoundParameters['ProxyUserName'] -ne $null)
+            if ($PSBoundParameters['ProxyCredential'] -ne $null)
             {
-                $_wsusconfig.ProxyUserName = $ProxyUserName
+                $_wsusconfig.ProxyUserName = $ProxyCredential.GetNetworkCredential().username
             }#endif
             else
             {
@@ -145,12 +143,12 @@ function Set-PSWsusConfigProxyServer {
                 $_wsusconfig.ProxyUserDomain = $null
             }
          
-            if ($PSBoundParameters['ProxyPassword'])
+            if ($PSBoundParameters['ProxyCredential'])
             {
                 # TO DO. Why Password dosen't set?
                 # Need secure connection with wsus
                 #$ProxyPassword = Read-Host -Prompt 'Enter Password' -AsSecureString
-                #$wsus.GetConfiguration().SetProxyPassword($ProxyPassword)
+                #$wsus.GetConfiguration().SetProxyPassword($ProxyCredential.getnetworkcredential().password)
             
                 Write-Warning "You need to specify password manually in console `n This issue we will fix in next release"
             }#endif
@@ -190,3 +188,11 @@ function Set-PSWsusConfigProxyServer {
             $_wsusconfig.Save()
         }
 }
+
+<#
+Set-PSWSUSConfigProxyServer.ps1
+
+Function 'Set-PSWsusConfigProxyServer' has both Username and Password parameters. 
+Either set the type of the Password parameter to SecureString or replace the Username and Password parameters with a Credential parameter of type PSCredential. 
+If using a Credential parameter in PowerShell 4.0 or earlier, please define a credential transformation attribute after the PSCredential type attribute.
+#>

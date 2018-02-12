@@ -1,7 +1,7 @@
 #################################
 #
 # PoshWSUS
-# Version 2.3.1.5
+# Version 2.3.1.6
 #
 # Boe Prox (c) 2011
 # http://learn-powershell.net
@@ -14,7 +14,7 @@
 ModuleToProcess = 'PoshWSUS.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.3.1.5'
+ModuleVersion = '2.3.1.6'
 
 # ID used to uniquely identify this module
 GUID = '4a327d07-b494-40ad-b154-a6116b1b1eb2'
