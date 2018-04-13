@@ -14,7 +14,7 @@
 ModuleToProcess = 'PoshWSUS.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.3.1.6'
+ModuleVersion = '2.3.2'
 
 # ID used to uniquely identify this module
 GUID = '4a327d07-b494-40ad-b154-a6116b1b1eb2'

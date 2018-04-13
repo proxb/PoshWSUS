@@ -1,5 +1,5 @@
-PoshWSUS 2.3.1.5 Release Notes
-Last Updated: 9 Sept 2016
+PoshWSUS 2.3.2 Release Notes
+Last Updated: 12 Apr 2018
 
 !!!IMPORTANT!!!
 Functions have been renamed from *-PoshWSUS* to *-PSWSUS* based on user feedback. 
@@ -42,6 +42,7 @@ Functions have been renamed from *-PoshWSUS* to *-PSWSUS* based on user feedback
 - Set-PSWSUSTargetingMode
 - Set-PSWSUSUpdateFiles
 - Set-PSWSUSUpdateSource
+- Copy-PSWSUSUpdateApproval
 
 -------------------
 |Removed Functions|
