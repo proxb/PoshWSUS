@@ -29,33 +29,6 @@ if (-not (Test-Path "HKLM:\SOFTWARE\Microsoft\Update Services\Server\Setup"))
 }
 
 # Load libraries (32bit)
-if ([System.IntPtr]::Size -eq 4)
-{
-	try
-	{
-		# Try loading properly installed Assemblies first
-		Add-Type -AssemblyName "Microsoft.UpdateServices.Administration" -ErrorAction Stop
-	}
-	catch
-	{
-		# Try loading brought along Assemblies second
-		Add-Type -Path "$ScriptPath\Libraries\x86\Microsoft.UpdateServices.Administration.dll" -ErrorAction 'SilentlyContinue'
-	}
-}
-# Load libraries (64bit)
-else
-{
-	try
-	{
-		# Try loading properly installed Assemblies first
-		Add-Type -AssemblyName "Microsoft.UpdateServices.Administration" -ErrorAction Stop
-	}
-	catch
-	{
-		# Try loading brought along Assemblies second
-		Add-Type -Path "$ScriptPath\Libraries\x64\Microsoft.UpdateServices.Administration.dll" -ErrorAction 'SilentlyContinue'
-	}
-}
 
 # Validate Library
 if ( -not ( [appdomain]::CurrentDomain.GetAssemblies() | %{ $_.GetName() } | Where-Object { $_.Name -eq "Microsoft.UpdateServices.Administration" } ) )
