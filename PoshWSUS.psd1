@@ -46,14 +46,14 @@ DotNetFrameworkVersion = '2.0.50727'
 # Minimum version of the common language runtime (CLR) required by this module
 CLRVersion = ''
 
-# Processor architecture (None, X86, Amd64, IA64) required by this module
+# Processor architecture (None, X86, $env:PROCESSOR_ARCHITECTURE, IA64) required by this module
 ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @()
 
 # Assemblies that must be loaded prior to importing this module
-
+RequiredAssemblies = @("Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.AdminDataAccessProxy.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.Administration.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.BaseApi.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.ClientServicing.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.CoreCommon.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.DBlayer.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.StringResources.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.StringResources.resources.dll", "Libraries\$env:PROCESSOR_ARCHITECTURE\Microsoft.UpdateServices.Utils.dll")
 # Script files (.ps1) that are run in the caller's environment prior to importing this module
 ScriptsToProcess = @()
 
