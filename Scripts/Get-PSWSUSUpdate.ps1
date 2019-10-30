@@ -61,7 +61,13 @@ function Get-PSWSUSUpdate {
 
     .PARAMETER Classification
         List of update classifications to search
-        
+
+    .PARAMETER UpdateId
+        Unique update identifier
+
+    .PARAMETER RevisionNumber
+        Revision number of an update
+
     .NOTES  
         Name: Get-PSWSUSUpdate
         Author: Boe Prox
@@ -103,7 +109,13 @@ function Get-PSWSUSUpdate {
         Description
         -----------
         Gets all updates matching the Windows Server 2012 category
-       
+
+    .EXAMPLE
+        Get-PSWSUSUpdate -UpdateId "261c110d-c706-4c38-acae-a8c13c43682a"
+
+        Description
+        -----------  
+        This command will get the latest revision of the update for the provided identifier.
     #> 
     [cmdletbinding(
         DefaultParameterSetName = 'All'
