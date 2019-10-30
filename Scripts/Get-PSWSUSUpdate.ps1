@@ -144,7 +144,11 @@ function Get-PSWSUSUpdate {
             [Parameter(ParameterSetName='UpdateScope')]
             [Microsoft.UpdateServices.Internal.BaseApi.UpdateCategory[]]$Category,
             [Parameter(ParameterSetName='UpdateScope')]
-            [Microsoft.UpdateServices.Internal.BaseApi.UpdateClassification[]]$Classification
+            [Microsoft.UpdateServices.Internal.BaseApi.UpdateClassification[]]$Classification,
+            [Parameter(Mandatory=$true, ParameterSetName='UpdateId')]
+            [guid] $UpdateId,
+            [Parameter(ParameterSetName='UpdateId')]
+            [int32] $RevisionNumber = 0
         )
     Begin {                
         if($wsus)
@@ -228,6 +232,9 @@ function Get-PSWSUSUpdate {
             }
             'UpdateScope' {
                 $Wsus.getupdates($UpdateScope)
+            }
+            'UpdateId'{
+                $Wsus.GetUpdate([Microsoft.UpdateServices.Administration.UpdateRevisionId]::new($UpdateId, $RevisionNumber))
             }
             'All'{
                 $Wsus.getupdates()
