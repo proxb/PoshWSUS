@@ -51,6 +51,7 @@ function Approve-PSWSUSUpdate {
                   
         [Parameter(Mandatory = $True)]
         [ValidateNotNullOrEmpty()]
+        [ValidateSet("All", "Install", "NotApproved", "Uninstall")]
         [Microsoft.UpdateServices.Administration.UpdateApprovalAction]$Action,
                       
         [Parameter(Mandatory = $True)]

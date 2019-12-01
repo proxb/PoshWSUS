@@ -208,7 +208,7 @@ function Get-PSWSUSUpdate {
                 }
                 If ($PSBoundParameters['ComputerTargetGroups']) {
                     $Groups = @{}
-                    $Wsus.GetComputerTargetGroups() | ForEach {                    
+                    $Wsus.GetComputerTargetGroups() | ForEach-Object {                    
                         $Groups[$_.Name]=$_
                     }
                     ForEach ($Group in $ComputerTargetGroups) {

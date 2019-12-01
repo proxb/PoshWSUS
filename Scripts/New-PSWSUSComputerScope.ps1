@@ -74,8 +74,10 @@ Function New-PSWSUSComputerScope {
         [parameter()]
         [string]$NameIncludes,        
         [parameter()]
+        [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
         [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$IncludedInstallationState,
         [parameter()]
+        [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
         [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallationState,
         [parameter()]
         [Switch]$IncludeSubGroups,
