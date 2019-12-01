@@ -115,9 +115,11 @@ function Get-PSWSUSUpdate {
             [string]$IncludeText,
             [Parameter(ParameterSetName='UpdateScope')]
             [string]$ExcludeText,
-            [Parameter(ParameterSetName='UpdateScope')]  
+            [Parameter(ParameterSetName='UpdateScope')]
+            [ValidateSet("Any", "Declined", "HasStaleUpdateApprovals", "LatestRevisionApproved", "NotApproved")]
             [Microsoft.UpdateServices.Administration.ApprovedStates]$ApprovedState,
             [Parameter(ParameterSetName='UpdateScope')]
+            [ValidateSet("All", "Driver", "DriverSet", "SoftwareApplication", "SoftwareUpdate")]
             [Microsoft.UpdateServices.Administration.UpdateTypes]$UpdateType,
             [Parameter(ParameterSetName='UpdateScope')]
             [string[]]$ComputerTargetGroups,
@@ -126,9 +128,11 @@ function Get-PSWSUSUpdate {
             [Parameter(ParameterSetName='UpdateScope')]
             [switch]$IsWsusInfrastructureUpdate,
             [Parameter(ParameterSetName='UpdateScope')]
+            [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
             [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$IncludedInstallationState,
             [Parameter(ParameterSetName='UpdateScope')]
-            [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallationState,
+            [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
+            [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallState,
             [Parameter(ParameterSetName='UpdateScope')]
             [DateTime]$FromArrivalDate,
             [Parameter(ParameterSetName='UpdateScope')]
@@ -138,8 +142,10 @@ function Get-PSWSUSUpdate {
             [Parameter(ParameterSetName='UpdateScope')]
             [DateTime]$ToCreationDate,
             [Parameter(ParameterSetName='UpdateScope')]
+            [ValidateSet("All", "Install", "NotApproved", "Uninstall")]
             [Microsoft.UpdateServices.Administration.UpdateApprovalActions]$UpdateApprovalAction,
             [Parameter(ParameterSetName='UpdateScope')]
+            [ValidateSet("All", "MicrosoftUpdate", "Other")]
             [Microsoft.UpdateServices.Administration.UpdateSources]$UpdateSource,
             [Parameter(ParameterSetName='UpdateScope')]
             [Microsoft.UpdateServices.Internal.BaseApi.UpdateCategory[]]$Category,
