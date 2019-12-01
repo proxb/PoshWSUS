@@ -49,20 +49,27 @@ function Set-PSWSUSConfigTargetingMode {
         [parameter(ParameterSetName='GroupPolicyOrRegistry')]
         [switch]$GroupPolicyOrRegistry
     )
-
-    if(-NOT $wsus)
+    Begin
     {
-
-        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
-        Break
-    }
-    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Targeting Mode')) {
-        Switch ($PSCmdlet.ParameterSetName) {
-            'UpdateServiceConsole' {$_wsusconfig.TargetingMode = 1}
-            'GroupPolicyOrRegistry' {$_wsusconfig.TargetingMode = 0}
-        }   
-        If ($PSBoundParameters['UpdateServiceConsole'] -OR $PSBoundParameters['GroupPolicyOrRegistry']) {
-            $_wsusconfig.Save()
+        if(-NOT $wsus)
+        {
+            
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
         }
     }
+    Process
+    {
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Targeting Mode')) {
+            Switch ($PSCmdlet.ParameterSetName) {
+                'UpdateServiceConsole' {$_wsusconfig.TargetingMode = 1}
+                'GroupPolicyOrRegistry' {$_wsusconfig.TargetingMode = 0}
+            }   
+            If ($PSBoundParameters['UpdateServiceConsole'] -OR $PSBoundParameters['GroupPolicyOrRegistry']) {
+                $_wsusconfig.Save()
+            }
+        }
+    }
+  
+    
 }

@@ -69,7 +69,13 @@ function Get-PSWSUSClientPerUpdate {
         [Parameter(Position = 2, ParameterSetName = 'Group')]   
         [Switch]$IncludeChildGroup                                                                                                 
     )
-    Begin {                
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+
         $ErrorActionPreference = 'stop'
         $hash = @{}
     }

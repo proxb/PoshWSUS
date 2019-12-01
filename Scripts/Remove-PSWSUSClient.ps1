@@ -47,7 +47,14 @@ function Remove-PSWSUSClient {
                 ParameterSetName = 'collection',
                 ValueFromPipeline = $True)]
                 [system.object[]]$Computername                                            
-                )  
+                )
+    Begin{
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {    
         ForEach ($Computer in $Computername) {
             Try {

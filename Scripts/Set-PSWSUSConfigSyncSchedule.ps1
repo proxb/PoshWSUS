@@ -68,41 +68,47 @@ function Set-PSWSUSConfigSyncSchedule {
         [ValidateRange(1, 24)][int]
         $NumberOfSynchronizationsPerDay
     )
-
-    if(-not $wsus)
+    Begin
     {
-        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
-        Break
-    }
-    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Sync Schedule')) {
-        $subscription = $wsus.GetSubscription()       
-        if ($SynchronizeAutomatically)
-        {
-            $subscription.SynchronizeAutomatically = $True
-            
-            if ($PSBoundParameters['SynchronizeAutomaticallyTimeOfDay'])
+        if(-not $wsus)
             {
-                # -------------------------------------------------- #
-                # SynchronizeAutomaticallyTimeOfDay Property
-                # WSUS stores dates and times in Coordinated Universal Time, 
-                # so convert the local time to Coordinated Universal Time.
-                # http://msdn.microsoft.com/en-us/library/microsoft.updateservices.administration.isubscription.synchronizeautomaticallytimeofday(v=vs.85).aspx
-                # -------------------------------------------------- #
+                Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+                Break
+            }
+    }
+    Process
+    {
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName,'Set Sync Schedule')) {
+            $subscription = $wsus.GetSubscription()       
+            if ($SynchronizeAutomatically)
+            {
+                $subscription.SynchronizeAutomatically = $True
                 
-                [System.DateTime]$localSyncHour = [System.DateTime]::Today + $SynchronizeAutomaticallyTimeOfDay
-                $subscription.SynchronizeAutomaticallyTimeOfDay = $localSyncHour.ToUniversalTime().TimeOfDay
-            
+                if ($PSBoundParameters['SynchronizeAutomaticallyTimeOfDay'])
+                {
+                    # -------------------------------------------------- #
+                    # SynchronizeAutomaticallyTimeOfDay Property
+                    # WSUS stores dates and times in Coordinated Universal Time, 
+                    # so convert the local time to Coordinated Universal Time.
+                    # http://msdn.microsoft.com/en-us/library/microsoft.updateservices.administration.isubscription.synchronizeautomaticallytimeofday(v=vs.85).aspx
+                    # -------------------------------------------------- #
+                    
+                    [System.DateTime]$localSyncHour = [System.DateTime]::Today + $SynchronizeAutomaticallyTimeOfDay
+                    $subscription.SynchronizeAutomaticallyTimeOfDay = $localSyncHour.ToUniversalTime().TimeOfDay
+                    
+                }#endif
+                
+                if ($PSBoundParameters['NumberOfSynchronizationsPerDay'])
+                {
+                    $subscription.NumberOfSynchronizationsPerDay = $NumberOfSynchronizationsPerDay
+                }#endif
             }#endif
-            
-            if ($PSBoundParameters['NumberOfSynchronizationsPerDay'])
+            else
             {
-                $subscription.NumberOfSynchronizationsPerDay = $NumberOfSynchronizationsPerDay
-            }#endif
-        }#endif
-        else
-        {
-            $subscription.SynchronizeAutomatically = $false
-        }#endElse
-        $subscription.Save()
+                $subscription.SynchronizeAutomatically = $false
+            }#endElse
+            $subscription.Save()
+        }
     }
+    
 }

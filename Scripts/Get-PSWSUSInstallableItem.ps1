@@ -98,7 +98,15 @@ function Get-PSWSUSInstallableItem {
             ParameterSetName = 'Name',
             ValueFromPipeline = $True)]
             [string]$UpdateName                                
-        )                   
+        )  
+        
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {
         #Perform appropriate action based on Parameter set name
         Switch ($pscmdlet.ParameterSetName) {            

@@ -69,7 +69,12 @@ function Get-PSWSUSUpdatePerClient {
         [Parameter(Position = 1, ParameterSetName = '')]
         [Microsoft.UpdateServices.Administration.UpdateScope]$UpdateScope                                                                                          
     )
-    Begin {                
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        } #TODO: This may be redundant as Get-PSWSUSClient already checks it, but it sounds better to 'fail fast'
         $ErrorActionPreference = 'stop'
         $hash = @{}
     }
