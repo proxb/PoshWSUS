@@ -49,6 +49,13 @@ function Get-PSWSUSClientGroupMembership {
         [ValidateNotNullOrEmpty()]
         $Computername                                          
     )   
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }
     Process {  
         ForEach ($Computer in $Computername) {
             If (($Computer -is [Microsoft.UpdateServices.Internal.BaseApi.ComputerTarget])) {

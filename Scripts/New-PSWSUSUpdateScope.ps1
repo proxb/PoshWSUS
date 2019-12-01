@@ -102,6 +102,11 @@ Function New-PSWSUSUpdateScope {
         [Switch]$IsWsusInfrastructureUpdate                    
         )
     Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
         Write-Verbose "Creating Computer Scope Object"
         $UpdateScope = New-Object Microsoft.UpdateServices.Administration.UpdateScope
     }

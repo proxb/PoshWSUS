@@ -72,7 +72,12 @@ function Get-PSWSUSUpdateSummary {
                 Position = 1,ParameterSetName = '')]
                 [Microsoft.UpdateServices.Administration.ComputerTargetScope]$ComputerScope                                                                  
         )
-    Begin {                
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
         $ErrorActionPreference = 'Stop'
         If (-NOT $PSBoundParameters.ContainsKey('ComputerScope')) {
             Write-Verbose "Creating default Computer Scope"

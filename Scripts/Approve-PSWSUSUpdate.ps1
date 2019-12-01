@@ -62,7 +62,13 @@ function Approve-PSWSUSUpdate {
         [Parameter()]
         [switch]$PassThru                                   
         )
-    Begin {}                    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }                    
     Process {
         ForEach ($Patch in $Update) {
             ForEach ($TargetGroup in $Group) {
@@ -94,5 +100,6 @@ function Approve-PSWSUSUpdate {
                 }
             }
         }
-    }                
+    }
+    End{}              
 } 
