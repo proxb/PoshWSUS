@@ -38,25 +38,33 @@ function Copy-PSWSUSUpdateApproval {
         [string]$DestinationComputerTargetGroup
     )
 
-    $approvalsSource = Get-PSWSUSUpdateApproval -ComputerTargetGroups $SourceComputerTargetGroup
-
-    
-    $targetGroupId = Get-PSWSUSGroup -Name $DestinationComputerTargetGroup
-
-    $approvalsSource | ForEach-Object {
-        $action = $_.Action
-        $kb = $_.UpdateKB
-        $updateID = $_.UpdateId
-        $deadline = $_.DeadLine
-        if ($deadline.ticks -eq 3155378975999999999) { 
-            $wsus.GetUpdate($updateID) | Approve-PSWSUSUpdate -Action $action -Group $targetGroupId
-            Write-Verbose "$($kb): $Action (no deadline)  $SourceComputerTargetGroup => $DestinationComputerTargetGroup"
-        } else {
-            $wsus.GetUpdate($updateID) | Approve-PSWSUSUpdate -Action $action -DeadLine $DeadLine -Group $targetGroupId
-            Write-Verbose "$($kb): $Action (deadline: $($deadline))  $SourceComputerTargetGroup => $DestinationComputerTargetGroup"
-            
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
         }
-
-       
     }
+    Process {
+        $approvalsSource = Get-PSWSUSUpdateApproval -ComputerTargetGroups $SourceComputerTargetGroup
+        
+        
+        $targetGroupId = Get-PSWSUSGroup -Name $DestinationComputerTargetGroup
+        
+        $approvalsSource | ForEach-Object {
+            $action = $_.Action
+            $kb = $_.UpdateKB
+            $updateID = $_.UpdateId
+            $deadline = $_.DeadLine
+            if ($deadline.ticks -eq 3155378975999999999) { 
+                $wsus.GetUpdate($updateID) | Approve-PSWSUSUpdate -Action $action -Group $targetGroupId
+                Write-Verbose "$($kb): $Action (no deadline)  $SourceComputerTargetGroup => $DestinationComputerTargetGroup"
+            } else {
+                $wsus.GetUpdate($updateID) | Approve-PSWSUSUpdate -Action $action -DeadLine $DeadLine -Group $targetGroupId
+                Write-Verbose "$($kb): $Action (deadline: $($deadline))  $SourceComputerTargetGroup => $DestinationComputerTargetGroup"
+                
+            }   
+        }
+    }
+    End{}
 }

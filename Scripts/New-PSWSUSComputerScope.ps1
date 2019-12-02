@@ -74,8 +74,10 @@ Function New-PSWSUSComputerScope {
         [parameter()]
         [string]$NameIncludes,        
         [parameter()]
+        [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
         [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$IncludedInstallationState,
         [parameter()]
+        [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
         [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallationState,
         [parameter()]
         [Switch]$IncludeSubGroups,
@@ -93,6 +95,11 @@ Function New-PSWSUSComputerScope {
         [datetime]$ToLastReportedStatusTime
         )
     Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
         Write-Verbose "Creating Computer Scope Object"
         $computerscope = New-Object Microsoft.UpdateServices.Administration.ComputerTargetScope
     }

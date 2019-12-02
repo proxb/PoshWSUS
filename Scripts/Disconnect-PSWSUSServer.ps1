@@ -21,6 +21,13 @@ function Disconnect-PSWSUSServer {
     #> 
     [cmdletbinding()]  
     Param ()
+    Begin{
+        if(-not $wsus)
+        {
+            Write-Information "There is no connection with your Windows Update Server already"
+            Break
+        }
+    }
     Process { 
         #Disconnect WSUS session by removing the variable   
         Remove-Variable -Name wsus -Force -Scope Script

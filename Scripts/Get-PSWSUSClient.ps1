@@ -82,8 +82,10 @@ function Get-PSWSUSClient {
             [Parameter(Position=0,ParameterSetName = 'Computer',ValueFromPipeline = $True)]
             [string[]]$Computername,
             [Parameter(ParameterSetName='ComputerScope')]
+            [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
             [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$IncludedInstallationState,
             [Parameter(ParameterSetName='ComputerScope')]
+            [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
             [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallState,
             [Parameter(ParameterSetName='ComputerScope')]
             [Microsoft.UpdateServices.Internal.BaseApi.ComputerTargetGroup[]]$ComputerTargetGroups,

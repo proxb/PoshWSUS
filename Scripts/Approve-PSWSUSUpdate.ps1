@@ -51,6 +51,7 @@ function Approve-PSWSUSUpdate {
                   
         [Parameter(Mandatory = $True)]
         [ValidateNotNullOrEmpty()]
+        [ValidateSet("All", "Install", "NotApproved", "Uninstall")]
         [Microsoft.UpdateServices.Administration.UpdateApprovalAction]$Action,
                       
         [Parameter(Mandatory = $True)]
@@ -62,7 +63,13 @@ function Approve-PSWSUSUpdate {
         [Parameter()]
         [switch]$PassThru                                   
         )
-    Begin {}                    
+    Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }                    
     Process {
         ForEach ($Patch in $Update) {
             ForEach ($TargetGroup in $Group) {
@@ -94,5 +101,6 @@ function Approve-PSWSUSUpdate {
                 }
             }
         }
-    }                
+    }
+    End{}              
 } 

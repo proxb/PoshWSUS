@@ -46,32 +46,36 @@ function Remove-PSWSUSClientFromGroup {
                 ValueFromPipeline = $True)]
                 [string]$Computer                                             
                 )
-    
-    if(-not $wsus)
+    Begin
     {
-        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
-        Break
-    }
-    
-    #Verify Computer is in WSUS
-    $client = Get-PSWSUSClient -computername $computer
-    If ($client) {
-        #Get group object
-        Write-Verbose "Retrieving group"
-        $targetgroup = $wsus.getcomputertargetgroups() | Where {
-            $_.Name -eq $group
-        }
-        If (-Not $targetgroup) {
-            Write-Error "Group $group does not exist in WSUS!"
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
             Break
         }
-        #Remove client from group
-        Write-Verbose "Removing client to group"
-        If ($pscmdlet.ShouldProcess($($client.fulldomainname))) {
-            $targetgroup.RemoveComputerTarget($client)
-            "$($client.fulldomainname) has been removed from $($group)"
+    }
+    Process
+    {
+        #Verify Computer is in WSUS
+        $client = Get-PSWSUSClient -computername $computer
+        If ($client) {
+            #Get group object
+            Write-Verbose "Retrieving group"
+            $targetgroup = $wsus.getcomputertargetgroups() | Where {
+                $_.Name -eq $group
+            }
+            If (-Not $targetgroup) {
+                Write-Error "Group $group does not exist in WSUS!"
+                Break
+            }
+            #Remove client from group
+            Write-Verbose "Removing client to group"
+            If ($pscmdlet.ShouldProcess($($client.fulldomainname))) {
+                $targetgroup.RemoveComputerTarget($client)
+                "$($client.fulldomainname) has been removed from $($group)"
+            }
+        } Else {
+            Write-Error "Computer: $computer is not in WSUS!"
         }
-    } Else {
-        Write-Error "Computer: $computer is not in WSUS!"
-    }    
+    }   
 } 

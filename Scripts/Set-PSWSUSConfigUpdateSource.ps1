@@ -94,38 +94,43 @@ function Set-PSWSUSConfigUpdateSource {
         [Switch]$UpstreamWsusServerUseSsl,
         [Switch]$IsReplicaServer
     )
-
-    if(-NOT $wsus)
+    Begin
     {
-        Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
-        Break
-    }
-    If ($PSCmdlet.ShouldProcess($wsus.ServerName,'UpdateConfigSource')) {
-        if($PSBoundParameters['SyncFromMicrosoftUpdate']) {
-            $_wsusconfig.SyncFromMicrosoftUpdate = $True
-        }
-        
-        if($PSBoundParameters['SyncFromMicrosoftUpdate'])
+        if(-NOT $wsus)
         {
-            $_wsusconfig.IsReplicaServer = $false
-        }#endif
-
-        if($PSBoundParameters['UpstreamWsusServerName'] -and $PSBoundParameters['UpstreamWsusServerPortNumber'])
-        {
-            $_wsusconfig.UpstreamWsusServerName = $UpstreamWsusServerName
-            $_wsusconfig.UpstreamWsusServerPortNumber = $UpstreamWsusServerPortNumber
-        }#endif
-        
-        # Default UpstreamWsusServerUseSsl equals $false
-        if($PSBoundParameters['UpstreamWsusServerUseSsl']) {
-            $_wsusconfig.UpstreamWsusServerUseSsl = $True
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
         }
-        
-        # Default IsReplicaServer equals $false
-        if($PSBoundParameters['IsReplicaServer']) {
-            $_wsusconfig.IsReplicaServer = $True
-        }
-        
-        $_wsusconfig.Save()
     }
+    Process
+    {
+        If ($PSCmdlet.ShouldProcess($wsus.ServerName,'UpdateConfigSource')) {
+            if($PSBoundParameters['SyncFromMicrosoftUpdate']) {
+                $_wsusconfig.SyncFromMicrosoftUpdate = $True
+            }
+            
+            if($PSBoundParameters['SyncFromMicrosoftUpdate'])
+            {
+                $_wsusconfig.IsReplicaServer = $false
+            }#endif
+            
+            if($PSBoundParameters['UpstreamWsusServerName'] -and $PSBoundParameters['UpstreamWsusServerPortNumber'])
+            {
+                $_wsusconfig.UpstreamWsusServerName = $UpstreamWsusServerName
+                $_wsusconfig.UpstreamWsusServerPortNumber = $UpstreamWsusServerPortNumber
+            }#endif
+            
+            # Default UpstreamWsusServerUseSsl equals $false
+            if($PSBoundParameters['UpstreamWsusServerUseSsl']) {
+                $_wsusconfig.UpstreamWsusServerUseSsl = $True
+            }
+            
+            # Default IsReplicaServer equals $false
+            if($PSBoundParameters['IsReplicaServer']) {
+                $_wsusconfig.IsReplicaServer = $True
+            }
+            
+            $_wsusconfig.Save()
+        }
+    } 
 }

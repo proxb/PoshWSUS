@@ -45,7 +45,14 @@ function Deny-PSWSUSUpdate {
         [Parameter(Mandatory = $True,ValueFromPipeline = $True)]
         [ValidateNotNullorEmpty()]
         [Microsoft.UpdateServices.Internal.BaseApi.Update[]]$Update
-    )                     
+    )
+    Begin{
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
+    }                
     Process {
         ForEach ($Patch in $Update) {
             #Decline the update
@@ -59,5 +66,6 @@ function Deny-PSWSUSUpdate {
                 }
             }         
         }
-    }    
+    }
+    End{}
 }

@@ -92,6 +92,11 @@ Function New-PSWSUSInstallApprovalRule {
             [Switch]$PassThru                                                                                                                                 
     )
     Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
         #Define the required action for the rule
         Write-Verbose "Setting the Action to 'Install'"
         $install = [Microsoft.UpdateServices.Administration.AutomaticUpdateApprovalAction]::Install       

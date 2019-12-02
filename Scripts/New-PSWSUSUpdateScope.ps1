@@ -73,8 +73,10 @@ Function New-PSWSUSUpdateScope {
     [cmdletbinding()]
     Param (
         [parameter()]
-        [Microsoft.UpdateServices.Administration.ApprovedStates]$ApprovedStates,        
+        [ValidateSet("Any", "Declined", "HasStaleUpdateApprovals", "LatestRevisionApproved", "NotApproved")]
+        [Microsoft.UpdateServices.Administration.ApprovedStates]$ApprovedState,        
         [parameter()]
+        [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
         [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$ExcludedInstallationStates,
         [parameter()]
         [switch]$ExcludeOptionalUpdates,
@@ -83,6 +85,7 @@ Function New-PSWSUSUpdateScope {
         [parameter()]
         [datetime]$FromCreationDate,
         [parameter()]
+        [ValidateSet("All", "Downloaded", "Failed", "Installed", "InstalledPendingReboot", "NotApplicable", "NotInstalled", "Unknown")]
         [Microsoft.UpdateServices.Administration.UpdateInstallationStates]$IncludedInstallationStates,
         [parameter()]
         [string]$TextIncludes, 
@@ -93,15 +96,23 @@ Function New-PSWSUSUpdateScope {
         [parameter()]
         [datetime]$ToCreationDate,
         [parameter()]
+        [ValidateSet("All", "Install", "NotApproved", "Uninstall")]
         [Microsoft.UpdateServices.Administration.UpdateApprovalActions]$UpdateApprovalActions,
         [parameter()]
+        [ValidateSet("All", "MicrosoftUpdate", "Other")]
         [Microsoft.UpdateServices.Administration.UpdateSources]$UpdateSources,
         [parameter()]
+        [ValidateSet("All", "Driver", "DriverSet", "SoftwareApplication", "SoftwareUpdate")]
         [Microsoft.UpdateServices.Administration.UpdateTypes]$UpdateTypes,
         [parameter()]
         [Switch]$IsWsusInfrastructureUpdate                    
         )
     Begin {
+        if(-not $wsus)
+        {
+            Write-Warning "Use Connect-PSWSUSServer to establish connection with your Windows Update Server"
+            Break
+        }
         Write-Verbose "Creating Computer Scope Object"
         $UpdateScope = New-Object Microsoft.UpdateServices.Administration.UpdateScope
     }
