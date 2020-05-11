@@ -100,7 +100,9 @@ function Get-PSWSUSClient {
             [Parameter(ParameterSetName='ComputerScope')]
             [switch]$IncludeSubGroups,
             [Parameter(ParameterSetName='ComputerScope')]
-            [switch]$IncludeDownstreamComputerTargets
+            [switch]$IncludeDownstreamComputerTargets,
+            [Parameter(ParameterSetName='ComputerScope')]
+            [string]$NameIncludes
         )
     Begin {                
         if($wsus)
@@ -137,6 +139,9 @@ function Get-PSWSUSClient {
                 }
                 If ($PSBoundParameters['ComputerTargetGroups']) {
                     [void]$ComputerScope.ComputerTargetGroups.AddRange($ComputerTargetGroups)
+                }
+                If ($PSBoundParameters['NameIncludes']) {
+                    $ComputerScope.NameIncludes = $NameIncludes
                 }
             }
         }#endif
