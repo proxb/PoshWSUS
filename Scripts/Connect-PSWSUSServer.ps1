@@ -14,7 +14,7 @@ Function Connect-PSWSUSServer {
         connection will be used.   
          
     .PARAMETER Port
-        Port number to connect to. Default is Port "80" if not used. Accepted values are "80","443","8350" and "8351" 
+        Port number to connect to. Default is Port "80" if not used. Accepted values are "80","443","8530" and "8531" 
            
     .NOTES  
         Name: Connect-PSWSUSServer
